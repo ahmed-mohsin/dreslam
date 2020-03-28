@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "151382205216",
+    "firebase_url": "https://dreslamelshahawy.firebaseio.com",
+    "project_id": "dreslamelshahawy",
+    "storage_bucket": "dreslamelshahawy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151382205216:android:539eae6b591c1d5047ed45",
+        "android_client_info": {
+          "package_name": "ahmedmohsin.com.dreslamelshahawy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151382205216-f8vof6nu3iflqd7ihve8lfbg1envr1l0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0k0RpI53F6oR4ocqh6fOdq9TiYYd4_0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151382205216-f8vof6nu3iflqd7ihve8lfbg1envr1l0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
