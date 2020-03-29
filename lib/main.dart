@@ -12,8 +12,8 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:flutter/services.dart';
 import 'AdminPanal/AdminBoard.dart';
 import 'Decorations.dart';
+import 'Loader.dart';
 import 'Rooms.dart';
-import 'appData.dart';
 import 'colors.dart';
 import 'component/flushbar.dart';
 import 'component/version.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appTitle,
+      title: 'Ibn Khaldun Center',
       theme: ThemeData(
         fontFamily: 'arn',
         primarySwatch: Colors.blue,
@@ -57,6 +57,37 @@ class _SplashState extends State<Splash> {
     setState(() {
       checkHive = false;
     });
+
+    void _gotoLogin() async {
+      Timer(Duration(seconds: 2), () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+              (Route<dynamic> route) => false,
+        );
+      });
+    }
+
+    void _gotoRooms() async {
+      Timer(Duration(seconds: 2), () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Rooms()),
+              (Route<dynamic> route) => false,
+        );
+      });
+    }
+
+    void _gotoadmins() async {
+      Timer(Duration(seconds: 2), () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => AdminBoard()),
+              (Route<dynamic> route) => false,
+        );
+      });
+    }
+
     final roomDataBox = Hive.openBox("roomsData");
     roomDataBox.then((data) {
       setState(() {
@@ -68,42 +99,39 @@ class _SplashState extends State<Splash> {
           print("there is data ");
 
           if (loginTypo != "admin") {
-            void _gotoRooms() async {
-              Timer(Duration(seconds: 2), () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Rooms()),
-                  (Route<dynamic> route) => false,
-                );
-              });
-            }
+            /////////////////////////////////////////////
+            DocumentReference ref =
+            Firestore.instance.collection('Data').document("appData");
+            ref.get().then((data) {
+              if (data.exists) {
+                print(data.data["version"]);
+                if (data.data["version"] == currentVersion) {
+                  print("version is ok i wil go to room");
 
-            _gotoRooms();
+                  Firestore.instance
+                      .collection("Data")
+                      .document("appData")
+                      .updateData(
+                      {"usersLogedinFromShared": FieldValue.increment(1)});
+
+                  _gotoRooms();
+                } else {
+                  flushBar(context, false,
+                      sec: 60,
+                      massage:
+                      "يوجد نسخة جديدة من التطبيق رجاء قم بتحديث هذه النسخة اولا ");
+                  _gotoLogin();
+                }
+              }
+            });
+
+            /////////////////////////////////////////////
+
           }
           if (loginTypo == "admin") {
-            void _gotoadmins() async {
-              Timer(Duration(seconds: 2), () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => AdminBoard()),
-                  (Route<dynamic> route) => false,
-                );
-              });
-            }
-
             _gotoadmins();
           }
         } else {
-          void _gotoLogin() async {
-            Timer(Duration(seconds: 2), () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-                (Route<dynamic> route) => false,
-              );
-            });
-          }
-
           _gotoLogin();
         }
       });
@@ -120,7 +148,7 @@ class _SplashState extends State<Splash> {
       resizeToAvoidBottomPadding: true,
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(image: decorationImage("g3.jpg")),
+          decoration: BoxDecoration(image: decorationImage("bg.png")),
           height: screenHeight,
           width: screenWidth,
           child: Center(
@@ -136,14 +164,14 @@ class _SplashState extends State<Splash> {
                         height: 200,
                         width: 200,
                         decoration:
-                            BoxDecoration(image: decorationImage("logo.png")),
+                        BoxDecoration(image: decorationImage("logo.png")),
                       ),
                     ),
                     checkHive == false
                         ? SpinKitCircle(
-                            color: redColor,
-                            size: 70,
-                          )
+                      color: greenColor,
+                      size: 70,
+                    )
                         : Container()
                   ],
                 ),
