@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "151382205216-stj27l5au7eldaib5kqo3kfojd1l4npu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ahmedmohsin.com.dreslamelshahawy",
+            "certificate_hash": "c9891eea772755108e88510f27d5b6c898a704cf"
+          }
+        },
+        {
           "client_id": "151382205216-f8vof6nu3iflqd7ihve8lfbg1envr1l0.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Ibn Khaldun Center',
+      title: 'Dr Eslam Elshahawy ',
       theme: ThemeData(
         fontFamily: 'arn',
         primarySwatch: Colors.blue,
@@ -63,7 +63,7 @@ class _SplashState extends State<Splash> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       });
     }
@@ -73,7 +73,7 @@ class _SplashState extends State<Splash> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Rooms()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       });
     }
@@ -83,7 +83,7 @@ class _SplashState extends State<Splash> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => AdminBoard()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       });
     }
@@ -101,7 +101,7 @@ class _SplashState extends State<Splash> {
           if (loginTypo != "admin") {
             /////////////////////////////////////////////
             DocumentReference ref =
-            Firestore.instance.collection('Data').document("appData");
+                Firestore.instance.collection('Data').document("appData");
             ref.get().then((data) {
               if (data.exists) {
                 print(data.data["version"]);
@@ -112,14 +112,14 @@ class _SplashState extends State<Splash> {
                       .collection("Data")
                       .document("appData")
                       .updateData(
-                      {"usersLogedinFromShared": FieldValue.increment(1)});
+                          {"usersLogedinFromShared": FieldValue.increment(1)});
 
                   _gotoRooms();
                 } else {
                   flushBar(context, false,
                       sec: 60,
                       massage:
-                      "يوجد نسخة جديدة من التطبيق رجاء قم بتحديث هذه النسخة اولا ");
+                          "يوجد نسخة جديدة من التطبيق رجاء قم بتحديث هذه النسخة اولا ");
                   _gotoLogin();
                 }
               }
@@ -164,14 +164,14 @@ class _SplashState extends State<Splash> {
                         height: 200,
                         width: 200,
                         decoration:
-                        BoxDecoration(image: decorationImage("logo.png")),
+                            BoxDecoration(image: decorationImage("logo.png")),
                       ),
                     ),
                     checkHive == false
                         ? SpinKitCircle(
-                      color: greenColor,
-                      size: 70,
-                    )
+                            color: greenColor,
+                            size: 70,
+                          )
                         : Container()
                   ],
                 ),
