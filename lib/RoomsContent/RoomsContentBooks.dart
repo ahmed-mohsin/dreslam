@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 
 import '../AppDrawer.dart';
 import '../Decorations.dart';
@@ -176,57 +177,27 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
 }
 
 class PdfReader extends StatefulWidget {
-  String title;
-  String bookLink;
+  String title, code;
 
-  PdfReader(this.title, this.bookLink);
+  PdfReader(this.title, this.code);
 
   @override
   _PdfReaderState createState() => _PdfReaderState();
 }
 
 class _PdfReaderState extends State<PdfReader> {
-  String path;
+  bool _isLoading = true;
+  PDFDocument document;
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
+  @override
+  void initState() {
+    super.initState();
+    loadDocument();
   }
 
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/teste.pdf');
-  }
-
-  Future<File> writeCounter(Uint8List stream) async {
-    final file = await _localFile;
-
-    // Write the file
-    return file.writeAsBytes(stream);
-  }
-
-  Future<bool> existsFile() async {
-    final file = await _localFile;
-    return file.exists();
-  }
-
-  Future<Uint8List> fetchPost() async {
-    final response = await http.get(widget.bookLink);
-    final responseJson = response.bodyBytes;
-
-    return responseJson;
-  }
-
-  void loadPdf() async {
-    await writeCounter(await fetchPost());
-    await existsFile();
-    path = (await _localFile).path;
-
-    if (!mounted) return;
-
-    setState(() {});
-    print(path);
+  loadDocument() async {
+    document = await PDFDocument.fromURL(widget.code);
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -238,24 +209,55 @@ class _PdfReaderState extends State<PdfReader> {
           centerTitle: true,
           title: Text(widget.title),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              path != null
-                  ? Container(
-                      height: MediaQuery.of(context).size.height - 100,
-                      child: PdfViewer(
-                        filePath: path,
-                      ))
-                  : Text("تحميل الكتاب"),
-              path == null
-                  ? RaisedButton(
-                      child: Text("عرض الكتاب"),
-                      onPressed: loadPdf,
-                    )
-                  : Container(),
-            ],
+        body: Container(
+          decoration: BoxDecoration(image: decorationImage("bg.png")),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Center(
+            child: _isLoading
+                ? Center(child: SpinKitCircle(color: redColor))
+                : PDFViewer(
+                    document: document,
+                    zoomSteps: 1,
+                    //uncomment below line to preload all pages
+                    // lazyLoad: false,
+                    // uncomment below line to scroll vertically
+                    // scrollDirection: Axis.vertical,
+
+                    //uncomment below code to replace bottom navigation with your own
+                    /* navigationBuilder:
+                        (context, page, totalPages, jumpToPage, animateToPage) {
+                      return ButtonBar(
+                        alignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.first_page),
+                            onPressed: () {
+                              jumpToPage()(page: 0);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.arrow_back),
+                            onPressed: () {
+                              animateToPage(page: page - 2);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.arrow_forward),
+                            onPressed: () {
+                              animateToPage(page: page);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.last_page),
+                            onPressed: () {
+                              jumpToPage(page: totalPages - 1);
+                            },
+                          ),
+                        ],
+                      );
+                    }, */
+                  ),
           ),
         ),
       ),

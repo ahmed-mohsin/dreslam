@@ -557,7 +557,7 @@ class RoomContent extends StatelessWidget {
                                 builder: (_) =>
                                     RoomContentBooks(title, roomCode)));
                       },
-                      child: item("المزكرات و الكتب", Icons.local_library)),
+                      child: item("المذكرات و الكتب", Icons.local_library)),
                   item("الاسئلة و الامتحانات السابقة", Icons.lock_open)
                 ],
               ),

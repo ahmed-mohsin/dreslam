@@ -34,9 +34,9 @@ dependencies:
   edge_alert: ^0.0.1
   path_provider: ^1.6.5
   flushbar: ^1.9.1
-  pdf_viewer_plugin: ^1.0.0+2
   md2_tab_indicator: ^1.0.2
   rflutter_alert: ^1.0.3
+  advance_pdf_viewer: any
 
 
 dev_dependencies:
