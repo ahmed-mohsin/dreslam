@@ -202,30 +202,29 @@ class _PdfReaderState extends State<PdfReader> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          centerTitle: true,
-          title: Text(widget.title),
-        ),
-        body: Container(
-          decoration: BoxDecoration(image: decorationImage("bg.png")),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Center(
-            child: _isLoading
-                ? Center(child: SpinKitCircle(color: redColor))
-                : PDFViewer(
-                    document: document,
-                    zoomSteps: 1,
-                    //uncomment below line to preload all pages
-                    // lazyLoad: false,
-                    // uncomment below line to scroll vertically
-                    // scrollDirection: Axis.vertical,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        title: Text(widget.title),
+      ),
+      body: Container(
+        decoration: BoxDecoration(image: decorationImage("bg.png")),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Center(
+          child: _isLoading
+              ? Center(child: SpinKitCircle(color: redColor))
+              : PDFViewer(
+                  document: document,
+                  zoomSteps: 1,
+                  //uncomment below line to preload all pages
+                  // lazyLoad: false,
+                  // uncomment below line to scroll vertically
+                  // scrollDirection: Axis.vertical,
 
-                    //uncomment below code to replace bottom navigation with your own
-                    /* navigationBuilder:
+                  //uncomment below code to replace bottom navigation with your own
+                  /* navigationBuilder:
                         (context, page, totalPages, jumpToPage, animateToPage) {
                       return ButtonBar(
                         alignment: MainAxisAlignment.spaceEvenly,
@@ -257,8 +256,7 @@ class _PdfReaderState extends State<PdfReader> {
                         ],
                       );
                     }, */
-                  ),
-          ),
+                ),
         ),
       ),
     );
