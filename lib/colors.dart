@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 int getColorHexFromStr(String colorStr) {
@@ -25,6 +26,7 @@ int getColorHexFromStr(String colorStr) {
 Color blueColor = Color(getColorHexFromStr('#203868'));
 Color greenColor = Color(getColorHexFromStr('#A2B710'));
 Color redColor = Color(getColorHexFromStr('#AA2728'));
+var mainColor= redColor;
 Color greyblackColor = Color(getColorHexFromStr("#313131"));
 Color yellowColor = Color(getColorHexFromStr('#EEDC00'));
 Color goldenColor = Color(getColorHexFromStr('#c8be9a'));

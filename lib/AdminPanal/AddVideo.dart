@@ -1,20 +1,16 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dreslamelshahawy/AdminPanal/rooms.dart';
-import 'package:dreslamelshahawy/RoomsContent/RoomContentVideos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-
 import '../AppDrawer.dart';
 import '../Decorations.dart';
 import '../HandleConnectionerror.dart';
 import '../Loader.dart';
 import '../PlayerPage.dart';
 import '../colors.dart';
-import 'CreateStudentAcount.dart';
-import 'EditStudentData.dart';
+import '../player2.dart';
 
 class AdminAddVideo extends StatelessWidget {
   String yearcode;
@@ -37,11 +33,11 @@ class AdminAddVideo extends StatelessWidget {
         child: Scaffold(
           drawer: AppDrawer(),
           appBar: AppBar(
-            backgroundColor: greyblackColor,
+            backgroundColor: blueColor,
             centerTitle: true,
             title: Text(
               yearTitle,
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           body: Container(
@@ -110,7 +106,7 @@ class _AdminAddVideoBodyState extends State<AdminAddVideoBody> {
         shadowColor: Colors.red[100],
         borderRadius: BorderRadiusDirectional.circular(20),
         elevation: 5,
-        color: greyblackColor,
+        color: blueColor,
         child: MaterialButton(
           onPressed: () {
             print(yearCode);
@@ -123,7 +119,7 @@ class _AdminAddVideoBodyState extends State<AdminAddVideoBody> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.red, fontWeight: FontWeight.w600),
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -134,6 +130,7 @@ class _AdminAddVideoBodyState extends State<AdminAddVideoBody> {
 class AdminAddVideoProfile extends StatefulWidget {
   String yearCode;
   String title;
+
   AdminAddVideoProfile(this.yearCode, this.title);
 
   @override
@@ -184,7 +181,7 @@ class _AdminAddVideoProfileState extends State<AdminAddVideoProfile> {
               centerTitle: true,
               title: Text(
                 widget.title,
-                style: TextStyle(color: goldenColor),
+                style: TextStyle(color: greenColor),
               ),
               backgroundColor: Colors.black,
               bottom: TabBar(
@@ -226,8 +223,9 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
         child: StreamBuilder(
       stream: Firestore.instance
           .collection("Rooms")
-          .document(roomCode)
+          .document("*$roomCode")
           .collection("Videos")
+          .orderBy("createdAt", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return HndleError(context);
@@ -269,7 +267,7 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => YoutubePlayerPage(
+                                        builder: (_) => YoutubePlayerPage2(
                                             snapshot.data.documents[index]
                                                 ['code'])));
                               },
@@ -284,11 +282,13 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    Text(
-                                      snapshot.data.documents[index]['title']
-                                          .toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
+                                    Expanded(
+                                      child: Text(
+                                        snapshot.data.documents[index]['title']
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -319,7 +319,7 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                                           "on") {
                                         Firestore.instance
                                             .collection("Rooms")
-                                            .document(roomCode)
+                                            .document("*$roomCode")
                                             .collection("Videos")
                                             .document(snapshot
                                                 .data.documents[index]['id']
@@ -328,7 +328,7 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                                       } else {
                                         Firestore.instance
                                             .collection("Rooms")
-                                            .document(roomCode)
+                                            .document("*$roomCode")
                                             .collection("Videos")
                                             .document(snapshot
                                                 .data.documents[index]['id']
@@ -345,13 +345,29 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
 //                                    onPressed: () {},
 //                                    child: Text("Edit",
 //                                        style: TextStyle(color: Colors.white))),
+                                Column(
+                                  children: <Widget>[
+                                    Text("عدد المشاهدات",style: TextStyle(color: Colors.white),),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.blue,shape: BoxShape.circle,
+                                          ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(snapshot
+                                            .data.documents[index]['views']
+                                            .toString(),style: TextStyle(color: Colors.white),),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 MaterialButton(
                                     color: Colors.black,
                                     hoverColor: Colors.black87,
                                     onPressed: () {
                                       Firestore.instance
                                           .collection("Rooms")
-                                          .document(roomCode)
+                                          .document("*$roomCode")
                                           .collection("Videos")
                                           .document(snapshot
                                               .data.documents[index]['id']
@@ -393,8 +409,6 @@ class _addNewVideoState extends State<addNewVideo> {
 
   final RoundedLoadingButtonController btnController =
       new RoundedLoadingButtonController();
-
-  addVideo() {}
 
   @override
   Widget build(BuildContext context) {
@@ -493,7 +507,7 @@ class _addNewVideoState extends State<addNewVideo> {
                       }
                       DocumentReference documentReference = Firestore.instance
                           .collection("Rooms")
-                          .document(widget.yearCode)
+                          .document("*${widget.yearCode}")
                           .collection("Videos")
                           .document();
                       documentReference.setData({
@@ -502,7 +516,8 @@ class _addNewVideoState extends State<addNewVideo> {
                         'title': title.text,
                         'name': name.text,
                         'views': 0,
-                        'id': documentReference.documentID
+                        'id': documentReference.documentID,
+                        "createdAt": FieldValue.serverTimestamp(),
                       }).then((data) {
                         btnController.success();
                       });

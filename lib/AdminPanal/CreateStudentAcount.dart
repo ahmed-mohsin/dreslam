@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:dreslamelshahawy/component/flushbar.dart';
 import 'package:flutter/services.dart';
@@ -9,10 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:status_alert/status_alert.dart';
 import '../AppDrawer.dart';
 import '../Decorations.dart';
-import 'package:smart_select/smart_select.dart';
-
 import '../appData.dart';
 import '../colors.dart';
 
@@ -90,19 +88,6 @@ class _CreateStudenAccountBodyState extends State<CreateStudenAccountBody> {
     return Container(
       child: Column(
         children: <Widget>[
-          //Text(widget.yearcode),
-//          Divider(indent: 20),
-//          SmartSelect<String>.multiple(
-//              title: 'المواد الدراسيه',
-//              value: roomList,
-//              options: widget.yearRooms,
-//              choiceType: SmartSelectChoiceType.chips,
-//              modalType: SmartSelectModalType.bottomSheet,
-//              onChange: (val) => setState(() {
-//                    roomList = val;
-//                    print(roomList.toString());
-//                  })),
-//          Text("$roomList"),
           items(
             yearRooms: widget.yearRooms,
             yearRoomsVal: widget.yearRoomsVal,
@@ -125,9 +110,12 @@ class items extends StatefulWidget {
 
 class _itemsState extends State<items> {
   String userName;
+  String token;
 
   @override
   void initState() {
+    token = "";
+    showAddRooms = false;
     final roomDataBox = Hive.openBox("roomsData");
     roomDataBox.then((data) {
       setState(() {
@@ -144,6 +132,8 @@ class _itemsState extends State<items> {
   List room = [];
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btn2Controller =
+      new RoundedLoadingButtonController();
   List roomVal = [];
   double padValue = 0;
   Map<int, String> hg;
@@ -155,6 +145,7 @@ class _itemsState extends State<items> {
     Paint(5, 'Indigo', Colors.indigo),
     Paint(6, 'Yellow', Colors.yellow)
   ];
+  bool showAddRooms;
 
   @override
   Widget build(BuildContext context) {
@@ -195,55 +186,6 @@ class _itemsState extends State<items> {
               ),
             ),
           ),
-          ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: widget.yearRooms.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final paint = paints[index];
-              return Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ListTile(
-                  onTap: () {
-                    setState(() {
-                      paints[index].selected = !paints[index].selected;
-                      if (paints[index].selected) {
-                        room.add(widget.yearRooms[index].toString());
-                        roomVal.add(widget.yearRoomsVal[index].toString());
-                        print(room);
-                        print(roomVal);
-                      } else {
-                        room.remove(widget.yearRooms[index].toString());
-                        roomVal.remove(widget.yearRoomsVal[index].toString());
-                        print(room);
-                        print(roomVal);
-                      }
-                    });
-                  },
-                  selected: paints[index].selected,
-                  leading: Container(
-                    width: 58,
-                    height: 108,
-                    padding: EdgeInsets.symmetric(vertical: 4.0),
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      backgroundColor: paints[index].colorpicture,
-                    ),
-                  ),
-                  title: Text(
-                    widget.yearRooms[index].toString(),
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  trailing: (paints[index].selected)
-                      ? Icon(
-                          Icons.check_box,
-                          size: 50,
-                        )
-                      : Icon(Icons.check_box_outline_blank, size: 50),
-                ),
-              );
-            },
-          ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: RoundedLoadingButton(
@@ -264,12 +206,12 @@ class _itemsState extends State<items> {
                   _btnController.reset();
                   return;
                 }
-                if (room.length == 0) {
-                  flushBar(context, false,
-                      massage: "تأكد من اختيار ماده او اكثر ", sec: 10);
-                  _btnController.reset();
-                  return;
-                }
+//                if (room.length == 0) {
+//                  flushBar(context, false,
+//                      massage: "تأكد من اختيار ماده او اكثر ", sec: 10);
+//                  _btnController.reset();
+//                  return;
+//                }
                 //////////////////////////////////////////////
                 final FirebaseAuth _newAccountAuth = FirebaseAuth.instance;
 
@@ -289,26 +231,32 @@ class _itemsState extends State<items> {
                         .document("appData")
                         .updateData({"usersnumber": FieldValue.increment(1)});
 
-                    Firestore.instance
-                        .collection('UsersID')
-                        .document(idController.text)
-                        .setData({
-                      "userId": idController.text,
-                      "mobile": 1220,
-                      "phone type": "",
-                      "token": user.uid,
-                      "createdBy": userName,
-                      "created at": FieldValue.serverTimestamp(),
-                      "roomsName": room,
-                      "canLogin": true,
-                      "avaliable": true,
-                      "roomsCode": roomVal
-                    });
+//                    Firestore.instance
+//                        .collection('UsersID')
+//                        .document(idController.text)
+//                        .setData({
+//                      "userId": idController.text,
+//                      "mobile": 1220,
+//                      "phone type": "",
+//                      "token": user.uid,
+//                      "createdBy": userName,
+//                      "created at": FieldValue.serverTimestamp(),
+//                      "roomsName": room,
+//                      "canLogin": true,
+//                      "avaliable": true,
+//                      "registeredPhone":"empty",
+//                      "roomsCode": roomVal
+//                    });
 
-                    _formKey.currentState.reset();
-                    _btnController.reset();
+//                    _formKey.currentState.reset();
+                    _btnController.success();
                     flushBar(context, true,
                         massage: "New user was added", sec: 10);
+                    print(token);
+                    setState(() {
+                      token = user.uid;
+                      showAddRooms = true;
+                    });
                   }
                 } on PlatformException catch (e) {
                   print(e.code);
@@ -369,14 +317,145 @@ class _itemsState extends State<items> {
               },
               controller: _btnController,
               child: Text(
-                "Submit",
+                "ضيف طالب جديد",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w600),
               ),
             ),
-          )
+          ),
+          showAddRooms == false
+              ? Container()
+              : Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        "اضف المواد الخاصة بالطالب",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: greyblackColor),
+                      ),
+                    ),
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: widget.yearRooms.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final paint = paints[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: ListTile(
+                            onTap: () {
+                              setState(() {
+                                paints[index].selected =
+                                    !paints[index].selected;
+                                if (paints[index].selected) {
+                                  room.add(widget.yearRooms[index].toString());
+                                  roomVal.add(
+                                      widget.yearRoomsVal[index].toString());
+                                  print(room);
+                                  print(roomVal);
+                                } else {
+                                  room.remove(
+                                      widget.yearRooms[index].toString());
+                                  roomVal.remove(
+                                      widget.yearRoomsVal[index].toString());
+                                  print(room);
+                                  print(roomVal);
+                                }
+                              });
+                            },
+                            selected: paints[index].selected,
+                            leading: Container(
+                              width: 58,
+                              height: 108,
+                              padding: EdgeInsets.symmetric(vertical: 4.0),
+                              alignment: Alignment.center,
+                              child: CircleAvatar(
+                                backgroundColor: paints[index].colorpicture,
+                              ),
+                            ),
+                            title: Text(
+                              widget.yearRooms[index].toString(),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            trailing: (paints[index].selected)
+                                ? Icon(
+                                    Icons.check_box,
+                                    size: 50,
+                                  )
+                                : Icon(Icons.check_box_outline_blank, size: 50),
+                          ),
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: RoundedLoadingButton(
+                        color: blueColor,
+                        height: 70,
+                        width: MediaQuery.of(context).size.width * .85,
+                        onPressed: () async {
+                          Firestore.instance
+                              .collection("Data")
+                              .document("appData")
+                              .updateData(
+                                  {"usersnumber": FieldValue.increment(1)});
+
+                          Firestore.instance
+                              .collection('UsersID')
+                              .document(idController.text)
+                              .setData({
+                            "userId": idController.text,
+                            "mobile": 1220,
+                            "phone type": "",
+                            "token": token,
+                            "createdBy": userName,
+                            "created at": FieldValue.serverTimestamp(),
+                            "roomsName": room,
+                            "canLogin": true,
+                            "avaliable": true,
+                            "registeredPhone": "empty",
+                            "roomsCode": roomVal
+                          }).whenComplete(() {
+//                            flushBar(context, true,
+//                                massage:
+//                                    "تمت اضافة المواد بنجاح للطالب \n $token",
+//                                sec: 10);
+
+                            StatusAlert.show(
+                              context,
+                              duration: Duration(seconds: 3),
+                              title: 'Done',
+                              subtitle: 'New Account Created \n ',
+                              configuration: IconConfiguration(icon: Icons.check_circle),
+                            );
+
+                            _formKey.currentState.reset();
+
+                            _btn2Controller.success();
+                            _btnController.reset();
+                            setState(() {
+                              showAddRooms = false;
+                            });
+                          });
+                        },
+                        controller: _btn2Controller,
+                        child: Text(
+                          "ضيف مواد الطالب الجديد",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
         ],
       ),
     );

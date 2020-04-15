@@ -1,17 +1,15 @@
 import 'dart:developer';
-import 'dart:ui';
 
-import 'package:dreslamelshahawy/schedeule.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'AdminPanal/AdminBoard.dart';
 import 'Decorations.dart';
+import 'LoginScreen.dart';
 import 'Rooms.dart';
 import 'colors.dart';
 import 'contact.dart';
 import 'main.dart';
-import 'news.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -44,7 +42,7 @@ class _AppDrawerState extends State<AppDrawer> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * .7,
-      color: loginTypo == "admin" ? greyblackColor : Colors.black,
+      color: loginTypo == "admin" ? blueColor : color2,
       child: Column(
         children: <Widget>[
           Container(
@@ -62,12 +60,12 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                 ),
                 Text(
-                  userName,
+                  userName!=null?userName:"visitor",
                   textDirection: TextDirection.ltr,
                   style: TextStyle(color: Colors.white),
                 ),
                 Divider(
-                  color: redColor,
+                  color: Colors.grey,
                   thickness: 4,
                 ),
               ],
@@ -109,26 +107,26 @@ class _AppDrawerState extends State<AppDrawer> {
                               icon1: Icons.school,
                             ),
                           ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => News()));
-                      },
-                      child: darwerListItem(
-                        title: "الاخبار",
-                        icon1: Icons.live_tv,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => schedule()));
-                      },
-                      child: darwerListItem(
-                        title: "المواعيد",
-                        icon1: Icons.calendar_today,
-                      ),
-                    ),
+//                    InkWell(
+//                      onTap: () {
+//                        Navigator.push(
+//                            context, MaterialPageRoute(builder: (_) => News()));
+//                      },
+//                      child: darwerListItem(
+//                        title: "الاخبار",
+//                        icon1: Icons.live_tv,
+//                      ),
+//                    ),
+//                    InkWell(
+//                      onTap: () {
+//                        Navigator.push(context,
+//                            MaterialPageRoute(builder: (_) => schedule()));
+//                      },
+//                      child: darwerListItem(
+//                        title: "المواعيد",
+//                        icon1: Icons.calendar_today,
+//                      ),
+//                    ),
                     InkWell(
                       onTap: () {
                         Navigator.push(context,
@@ -155,12 +153,6 @@ class _AppDrawerState extends State<AppDrawer> {
                         title: "تسجيل خروج",
                         icon1: Icons.remove_circle_outline,
                       ),
-                    ),
-                    Image.asset(
-                      "assets/logo2.png",
-                      color: goldenColor,
-                      height: 90,
-                      width: 90,
                     ),
                   ],
                 ),

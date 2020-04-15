@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../AppDrawer.dart';
@@ -7,6 +8,7 @@ import '../HandleConnectionerror.dart';
 import '../Loader.dart';
 import '../PlayerPage.dart';
 import '../colors.dart';
+import '../player2.dart';
 
 class RoomContentVideo extends StatelessWidget {
   String title;
@@ -24,18 +26,17 @@ class RoomContentVideo extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          drawer: AppDrawer(),
           appBar: AppBar(
-            iconTheme: new IconThemeData(color: redColor),
+            iconTheme: new IconThemeData(color: mainColor),
             backgroundColor: Colors.black,
             centerTitle: true,
             title: Text(
               title,
-              style: TextStyle(color: redColor),
+              style: TextStyle(color: mainColor),
             ),
           ),
           body: Container(
-            decoration: BoxDecoration(image: decorationImage("bg.png")),
+            decoration: BoxDecoration(image: decorationImage("g3.jpg")),
             width: screenWidth,
             height: screenHeight,
             child: SingleChildScrollView(
@@ -52,7 +53,7 @@ class RoomContentVideo extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Divider(
-                      color: Colors.red,
+                      color: goldenColor,
                     ),
                   ),
                   RoomContentVideoStreamBuilder(roomCode)
@@ -77,9 +78,10 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
         child: StreamBuilder(
       stream: Firestore.instance
           .collection("Rooms")
-          .document(roomCode)
+          .document("*$roomCode")
           .collection("Videos")
           .where('show', isEqualTo: "on")
+          .orderBy("createdAt", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return HndleError(context);
@@ -102,57 +104,101 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                   return Padding(
                     padding:
                         const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => YoutubePlayerPage(
-                                    snapshot.data.documents[index]['code'])));
-                      },
-                      child: new Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(7),
-                            color: Colors.white30),
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.play_circle_filled,
-                                        color: Colors.white,
+                    child: new Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: mainColor),
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.transparent),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Row(
+                                children: <Widget>[
+
+                                  Container(
+                                    child: Expanded(
+                                      child: Text(
+                                        snapshot
+                                            .data.documents[index]['title']
+                                            .toString(),
+                                        style: TextStyle(
+                                            color: mainColor, fontSize: 18),
                                       ),
                                     ),
-                                    Text(
-                                      snapshot.data.documents[index]['title']
-                                          .toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: mainColor,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 30, right: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    snapshot.data.documents[index]['name'],
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  Text(
+                                    " تمت مشاهدته ${snapshot.data.documents[index]['views'].toString()} مرة ",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              color: mainColor,
+                            ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.only(left: 30, right: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+
+                                  InkWell(onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => YoutubePlayerPage2(
+                                                snapshot.data.documents[index]['code'])));
+
+                                    Firestore.instance
+                                        .collection("Rooms")
+                                        .document("*$roomCode")
+                                        .collection("Videos")
+                                        .document(snapshot.data.documents[index]['id'])
+                                        .updateData({"views": FieldValue.increment(1)});
+                                  },
+                                    child: Row(
+                                      children: <Widget>[Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                                          child: Text(
+                                            "Play The video",
+                                            style: TextStyle(color: mainColor),
+                                          ),
+                                        ),
+                                        Icon(
+                                        Icons.play_circle_filled,
+                                        color: mainColor,
+                                      ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Divider(
-                                color: Colors.white,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 30, right: 30),
-                                child: Text(
-                                  snapshot.data.documents[index]['name'],
-                                  style: TextStyle(color: Colors.white30),
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

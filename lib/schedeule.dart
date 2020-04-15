@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'AppDrawer.dart';
 import 'Decorations.dart';
 import 'HandleConnectionerror.dart';
 import 'Loader.dart';
+import 'PlayerPage.dart';
 import 'colors.dart';
 
 class schedule extends StatelessWidget {
@@ -17,18 +19,17 @@ class schedule extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          drawer: AppDrawer(),
           appBar: AppBar(
-            iconTheme: new IconThemeData(color: redColor),
+            iconTheme: new IconThemeData(color: greenColor),
             backgroundColor: Colors.black,
             centerTitle: true,
             title: Text(
-              "المواعيد ",
-              style: TextStyle(color: redColor),
+              "المواعيد",
+              style: TextStyle(color: mainColor),
             ),
           ),
           body: Container(
-            decoration: BoxDecoration(image: decorationImage("bg.png")),
+            decoration: BoxDecoration(image: decorationImage("g3.jpg")),
             width: screenWidth,
             height: screenHeight,
             child: SingleChildScrollView(
@@ -80,13 +81,9 @@ class Categorieslist extends StatelessWidget {
                       onTap: () {},
                       child: new Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(7),
-                            color:
-                                snapshot.data.documents[index]['color'] == null
-                                    ? Colors.white30
-                                    : Color(getColorHexFromStr(snapshot
-                                            .data.documents[index]['color']))
-                                        .withOpacity(.3)),
+                          border: Border.all(color: goldenColor),
+                            borderRadius: BorderRadius.circular(7),
+                            ),
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: Column(
@@ -100,18 +97,18 @@ class Categorieslist extends StatelessWidget {
                                       .toString(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.white),
+                                      color: mainColor),
                                 ),
                               ),
                               Divider(
-                                color: Colors.white,
+                                color: goldenColor,
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
                                     top: 10, right: 20, left: 20),
                                 child: Text(
                                   snapshot.data.documents[index]['time'],
-                                  style: TextStyle(color: Colors.grey),
+                                  style: TextStyle(color: mainColor),
                                 ),
                               ),
                             ],

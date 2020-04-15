@@ -1,10 +1,12 @@
-import 'package:dreslamelshahawy/AdminPanal/AddVideo.dart';
 import 'package:dreslamelshahawy/AdminPanal/rooms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../AppDrawer.dart';
 import '../Decorations.dart';
 import '../colors.dart';
+import 'AddBook.dart';
+import 'AddVideo.dart';
+import 'AdminAsk.dart';
 import 'CreateStudentAcount.dart';
 import 'EditStudentData.dart';
 
@@ -29,7 +31,7 @@ class Years extends StatelessWidget {
             centerTitle: true,
             title: Text(
               title,
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           body: Container(
@@ -75,10 +77,11 @@ class _YearsBodyState extends State<YearsBody> {
         shrinkWrap: true,
         crossAxisCount: 2,
         children: <Widget>[
-          yearItem("الفرقة الرابعة", "104", r104, r104val),
-          yearItem("الفرقة التالتة", "103", r103, r103val),
-          yearItem("الفرقة التانية", "102", r102, r102val),
-          yearItem("الفرقة الاولي", "101", r101, r101val),
+          yearItem("الفرقة الأولي", "101", r101, r101val),
+          yearItem("الفرقة الثانية", "102", r102, r102val),
+          yearItem("الفرقة الثالثة", "103", r103, r103val),
+          yearItem("الفرقة الثالثة", "104", r104, r104val),
+
         ],
       ),
     );
@@ -110,11 +113,22 @@ class _YearsBodyState extends State<YearsBody> {
                   context,
                   MaterialPageRoute(
                       builder: (_) => AdminAddVideo(
-                            yearcode: yearcode,
-                            yearRooms: yearRooms,
-                            yearRoomsVal: yearRoomsVal,
-                            yearTitle: title,
-                          )));
+                        yearcode: yearcode,
+                        yearRooms: yearRooms,
+                        yearRoomsVal: yearRoomsVal,
+                        yearTitle: title,
+                      )));
+            }
+            if (widget.type == "books") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => AdminAddBook(
+                        yearcode: yearcode,
+                        yearRooms: yearRooms,
+                        yearRoomsVal: yearRoomsVal,
+                        yearTitle: title,
+                      )));
             }
             if (widget.type == "edit") {
               Navigator.push(
@@ -126,12 +140,22 @@ class _YearsBodyState extends State<YearsBody> {
                             yearRoomsVal: yearRoomsVal,
                           )));
             }
+            if (widget.type == "ask") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => AdminAskBody(
+                            yearcode: yearcode,
+                            yearRooms: yearRooms,
+                            yearRoomsVal: yearRoomsVal,
+                          )));
+            }
           },
           child: Text(
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.red, fontWeight: FontWeight.w600),
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ),
       ),

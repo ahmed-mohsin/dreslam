@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../AppDrawer.dart';
 import '../Decorations.dart';
 import '../colors.dart';
+import 'AccountsActivations.dart';
 import 'EditStudentData.dart';
 import 'years.dart';
 
@@ -51,9 +52,6 @@ class AdminBoard extends StatelessWidget {
 }
 
 class AdminBoardBody extends StatelessWidget {
-  String userId = "123456";
-  String year = "101";
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -133,44 +131,78 @@ class AdminBoardBody extends StatelessWidget {
               ),
             ),
           ),
-//          Padding(
-//            padding: const EdgeInsets.all(8.0),
-//            child: Material(
-//              color: blueColor,
-//              elevation: 10,
-//              borderRadius: BorderRadiusDirectional.circular(10),
-//              child: MaterialButton(
-//                minWidth: MediaQuery.of(context).size.width * .75,
-//                onPressed: () async {},
-//                child: Text(
-//                  "إدارة المواعيد",
-//                  style: TextStyle(
-//                      color: Colors.white,
-//                      fontSize: 20,
-//                      fontWeight: FontWeight.w600),
-//                ),
-//              ),
-//            ),
-//          ),
-//          Padding(
-//            padding: const EdgeInsets.all(8.0),
-//            child: Material(
-//              color: blueColor,
-//              elevation: 10,
-//              borderRadius: BorderRadiusDirectional.circular(10),
-//              child: MaterialButton(
-//                minWidth: MediaQuery.of(context).size.width * .75,
-//                onPressed: () async {},
-//                child: Text(
-//                  "إدارة الاخبار",
-//                  style: TextStyle(
-//                      color: Colors.white,
-//                      fontSize: 20,
-//                      fontWeight: FontWeight.w600),
-//                ),
-//              ),
-//            ),
-//          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              color: blueColor,
+              elevation: 10,
+              borderRadius: BorderRadiusDirectional.circular(10),
+              child: MaterialButton(
+                minWidth: MediaQuery.of(context).size.width * .75,
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Years("books", "اداره الكتب")));
+                },
+                child: Text(
+                  "إضافه او الغاء كتاب او مذكره",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              color: blueColor,
+              elevation: 10,
+              borderRadius: BorderRadiusDirectional.circular(10),
+              child: MaterialButton(
+                minWidth: MediaQuery.of(context).size.width * .75,
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Years("ask", "أسئلة الطلبة")));
+                },
+                child: Text(
+                  "أسئلة الطلبة",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              color: blueColor,
+              elevation: 10,
+              borderRadius: BorderRadiusDirectional.circular(10),
+              child: MaterialButton(
+                minWidth: MediaQuery.of(context).size.width * .75,
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => AccountsActivation()));
+                },
+                child: Text(
+                  "تفعيل الحسابات",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

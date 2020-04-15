@@ -22,7 +22,7 @@ class Loader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SpinKitCircle(color: redColor),
+              SpinKitCircle(color: goldenColor),
               Text(
                 'برجاء الانتطار ...',
                 style: TextStyle(color: goldenColor),
@@ -54,10 +54,10 @@ class LoginLoader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SpinKitCircle(color: redColor),
+              SpinKitCircle(color: greenColor),
               Text(
                 'برجاء الانتطار ...',
-                style: TextStyle(color: goldenColor),
+                style: TextStyle(color: greenColor),
               )
             ],
           ),

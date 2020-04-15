@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
+import 'package:dreslamelshahawy/player2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +50,7 @@ void signInWithEmailAndPassword(
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (_) => YoutubePlayerPage("ivioby1mcYI")));
+                builder: (_) => YoutubePlayerPage2("ivioby1mcYI")));
       }
     });
     // Navigate to main page

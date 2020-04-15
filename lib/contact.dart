@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'AppDrawer.dart';
 import 'Decorations.dart';
 import 'HandleConnectionerror.dart';
 import 'Loader.dart';
+import 'PlayerPage.dart';
 import 'colors.dart';
 
 class Contact extends StatelessWidget {
@@ -13,34 +15,30 @@ class Contact extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          drawer: AppDrawer(),
-          appBar: AppBar(
-            iconTheme: new IconThemeData(color: redColor),
-            backgroundColor: Colors.black,
-            centerTitle: true,
-            title: Text(
-              "اتصل بنا",
-              style: TextStyle(color: redColor),
-            ),
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: new IconThemeData(color: greenColor),
+          backgroundColor: Colors.black,
+          centerTitle: true,
+          title: Text(
+            "اتصل بنا",
+            style: TextStyle(color: mainColor),
           ),
-          body: Container(
-            decoration: BoxDecoration(image: decorationImage("bg.png")),
-            width: screenWidth,
-            height: screenHeight,
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Categorieslist(),
-                ],
-              ),
+        ),
+        body: Container(
+          decoration: BoxDecoration(image: decorationImage("g3.jpg")),
+          width: screenWidth,
+          height: screenHeight,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Categorieslist(),
+              ],
             ),
           ),
         ),
@@ -79,13 +77,9 @@ class Categorieslist extends StatelessWidget {
                       onTap: () {},
                       child: new Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(7),
-                            color:
-                                snapshot.data.documents[index]['color'] == null
-                                    ? Colors.white30
-                                    : Color(getColorHexFromStr(snapshot
-                                            .data.documents[index]['color']))
-                                        .withOpacity(.3)),
+                          border: Border.all(color: goldenColor),
+                            borderRadius: BorderRadius.circular(7),
+                            ),
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 8),
                           child: Column(
@@ -93,17 +87,17 @@ class Categorieslist extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   snapshot.data.documents[index]['title']
                                       .toString(),
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white),
+                                      fontWeight: FontWeight.w700,
+                                      color: mainColor),
                                 ),
                               ),
                               Divider(
-                                color: Colors.white,
+                                color: goldenColor,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
@@ -113,12 +107,12 @@ class Categorieslist extends StatelessWidget {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
                                         Icons.phone,
-                                        color: Colors.white,
+                                        color: mainColor,
                                       ),
                                     ),
                                     Text(
                                       snapshot.data.documents[index]['numbers'],
-                                      style: TextStyle(color: Colors.grey),
+                                      style: TextStyle(color: mainColor),
                                     ),
                                   ],
                                 ),
