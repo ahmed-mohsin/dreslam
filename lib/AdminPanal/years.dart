@@ -80,7 +80,7 @@ class _YearsBodyState extends State<YearsBody> {
           yearItem("الفرقة الأولي", "101", r101, r101val),
           yearItem("الفرقة الثانية", "102", r102, r102val),
           yearItem("الفرقة الثالثة", "103", r103, r103val),
-          yearItem("الفرقة الثالثة", "104", r104, r104val),
+          yearItem("الفرقة الرابعة", "104", r104, r104val),
 
         ],
       ),

@@ -33,6 +33,7 @@ class _RoomsState extends State<Rooms> {
     roomDataBox.then((data) {
       setState(() {
         roomsName = data.get("roomsName");
+
       });
     });
   }
@@ -180,6 +181,7 @@ class _RoomslistState extends State<Roomslist> {
   String userName;
   String UID;
   bool saved;
+  bool showAlert ;
 
   @override
   void initState() {
@@ -191,6 +193,8 @@ class _RoomslistState extends State<Roomslist> {
         userName = data.get("userName");
         roomsCode = data.get("roomsCode");
         UID = data.get("UID");
+        showAlert=data.get("showalert");
+        print("show alert == $showAlert");
       });
       print(data.get("userName"));
       print(UID);
@@ -218,24 +222,21 @@ class _RoomslistState extends State<Roomslist> {
             padding: const EdgeInsets.only(bottom: 8, left: 8, right: 8),
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => RoomContent(roomsName[index].toString(),
-                          roomsCode[index].toString()),
-                    ));
+//                Navigator.push(
+//                    context,
+//                    MaterialPageRoute(
+//                      builder: (_) => RoomContent(roomsName[index].toString(),
+//                          roomsCode[index].toString()),
+//                    ));
 
-//                if (saved == null) {
-//                  showAlertDialog(context, userName,
-//                      roomsName[index].toString(), roomsCode[index].toString());
-//                } else {
-//                  Navigator.push(
-//                      context,
-//                      MaterialPageRoute(
-//                        builder: (_) => RoomContent(roomsName[index].toString(),
-//                            roomsCode[index].toString()),
-//                      ));
-//                }
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RoomContent(roomsName[index].toString(),
+                            roomsCode[index].toString()),
+                      ));
+
 
 //                DocumentReference getRoomVideoCode = Firestore.instance
 //                    .collection('AdminPanal.Rooms')
@@ -304,284 +305,6 @@ class _RoomslistState extends State<Roomslist> {
     );
   }
 
-  showAlertDialog(
-      BuildContext context, String userId, var roomName, var roomsCode) {
-    showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          final _name = TextEditingController();
-          final _mail = TextEditingController();
-          final _mobile = TextEditingController();
-          final formKey = GlobalKey<FormState>();
-          bool _termsChecked = false;
-          String genderType = "male";
-
-          int radioValue = -1;
-          bool _autoValidate = false;
-          void _validateInputs() {
-            final form = formKey.currentState;
-            if (form.validate()) {
-              // Text forms has validated.
-              // Let's validate radios and checkbox
-              if (radioValue < 0) {
-                print("Please select your gender");
-                // None of the radio buttons was selected
-                // _showSnackBar('Please select your gender');
-              } else if (!_termsChecked) {
-                // The checkbox wasn't checked
-                print("Please select your hghghg");
-                //_showSnackBar("Please accept our terms");
-              } else {
-                // Every of the data in the form are valid at this point
-                form.save();
-              }
-            } else {
-              setState(() => _autoValidate = true);
-            }
-          }
-
-          void validateInputs() {
-            final form = formKey.currentState;
-            if (form.validate()) {
-              // Text forms was validated.
-              form.save();
-            } else {
-              setState(() => _autoValidate = true);
-            }
-          }
-
-          int _radioValue1 = 0;
-          void _handleRadioValueChange1(int value) {
-            setState(() {
-              _radioValue1 = value;
-            });
-          }
-
-          // set up the buttons
-          Widget cancelButton = FlatButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          );
-          Widget continueButton = FlatButton(
-            child: Text("Continue"),
-            onPressed: () async {
-              if (!formKey.currentState.validate()) {
-                return;
-              } else {
-                DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-                AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-                print(
-                    'Running on ${androidInfo.brand}  ${androidInfo.model}  ${androidInfo.androidId}');
-
-                Firestore.instance
-                    .collection('UsersID')
-                    .document(UID)
-                    .updateData({
-                  "Formgender": genderType,
-                  'FormuserName': _name.text,
-                  'FormuserMail': _mail.text,
-                  'FormuserMobile': _mobile.text,
-                  "FormuserId": userId,
-                  "Form login at": FieldValue.serverTimestamp(),
-                  "Form deviceId": "${androidInfo.brand}=>${androidInfo.model}",
-                }).then((data) {
-                  final userBox = Hive.box("userData");
-                  setState(() {
-                    userBox.put("saved", true);
-                  });
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RoomContent(roomName, roomsCode),
-                      ));
-                });
-              }
-            },
-          );
-
-          int selectedRadioClass = 0;
-          int selectedRadiogender = 0;
-
-          return AlertDialog(
-            actions: [
-              cancelButton,
-              continueButton,
-            ],
-            content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return SizedBox(
-                  height: 350,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Card(
-                        //color: Colors.white,
-                        elevation: 0,
-                        child: Form(
-                          autovalidate: _autoValidate,
-                          key: formKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("ادخل البيانات حتي تتمكن من مشاهدة المادة"),
-                              Container(
-                                width: MediaQuery.of(context).size.width * .7,
-                                height: 85,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  controller: _name,
-                                  validator: (value) {
-                                    if (value.length < 7)
-                                      return 'اكتب اسم صحيح';
-                                    else if (value.isEmpty) {
-                                      return ' *اكتب الإسم';
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: "الاسم",
-                                      filled: true,
-                                      fillColor: Colors.grey.shade50),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 4, bottom: 4),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * .7,
-                                  height: 85,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
-                                    controller: _mail,
-                                    validator: (value) {
-                                      Pattern pattern =
-                                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                      RegExp regex = new RegExp(pattern);
-                                      if (!regex.hasMatch(value))
-                                        return 'اكتب ايميل صحيح';
-                                      else
-                                        return null;
-                                    },
-                                    decoration: InputDecoration(
-                                        labelText: "الايميل الشخصي",
-                                        filled: true,
-                                        fillColor: Colors.grey.shade50),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * .7,
-                                height: 85,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  controller: _mobile,
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return ' *اكتب الموبايل';
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: "الموبايل",
-                                      filled: true,
-                                      fillColor: Colors.grey.shade50),
-                                ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      Radio<int>(
-                                        activeColor: greenColor,
-                                        value: 0,
-                                        groupValue: selectedRadiogender,
-                                        onChanged: (int value) {
-                                          setState(() {
-                                            selectedRadiogender = value;
-                                            print("male");
-                                            genderType = "ذكر";
-                                          });
-                                        },
-                                      ),
-                                      Text("ذكر"),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Radio<int>(
-                                        activeColor: greenColor,
-                                        value: 1,
-                                        groupValue: selectedRadiogender,
-                                        onChanged: (int value) {
-                                          setState(() {
-                                            selectedRadiogender = value;
-                                            print("female");
-                                            genderType = "أنثي";
-                                          });
-                                        },
-                                      ),
-                                      Text("انثي"),
-                                    ],
-                                  )
-                                ],
-                              )
-                              /*Column(
-                                children: <Widget>[
-                                  new RadioListTile<int>(
-                                      title: new Text('حقوق عربي'),
-                                      value: 0,
-                                      groupValue: radioValue,
-                                      onChanged: _handleRadioValueChange1),
-                                  new RadioListTile<int>(
-                                      title: new Text('حقوق انجليزي'),
-                                      value: 1,
-                                      groupValue: radioValue,
-                                      onChanged: _handleRadioValueChange1),
-                                ],
-                              ),*/
-//                    Row(
-//                      mainAxisAlignment: MainAxisAlignment.center,
-//                      children: <Widget>[
-//                        new Radio(
-//                          value: 0,
-//                          groupValue: _radioValue1,
-//                          onChanged: _handleRadioValueChange1,
-//                        ),
-//                        new Text(
-//                          'Carnivore',
-//                          style: new TextStyle(fontSize: 16.0),
-//                        ),
-//                        new Radio(
-//                          value: 1,
-//                          groupValue: _radioValue1,
-//                          onChanged: _handleRadioValueChange1,
-//                        ),
-//                        new Text(
-//                          'Herbivore',
-//                          style: new TextStyle(
-//                            fontSize: 16.0,
-//                          ),
-//                        ),
-//                      ],
-//                    )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        });
-  }
 }
 
 class RoomContent extends StatelessWidget {

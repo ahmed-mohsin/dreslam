@@ -35,7 +35,7 @@ class _StudentsDataState extends State<StudentsData> {
               centerTitle: true,
               title: Text(
                 "Students Data",
-                style: TextStyle(color: greenColor),
+                style: TextStyle(color: mainColor),
               ),
               backgroundColor: Colors.black,
               bottom: TabBar(
@@ -88,7 +88,7 @@ class _NewDataState extends State<NewData> {
 
     ///UsersData/0GGQ7F2ez0eQJxK0BqKm
     return StreamBuilder(
-      stream: Firestore.instance.collection("NewUsersData").snapshots(),
+      stream: Firestore.instance.collection("UsersID").where('avaliable', isEqualTo: false).orderBy("created at",descending:true ).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return HndleError(context);
         switch (snapshot.connectionState) {
@@ -142,7 +142,7 @@ class _NewDataState extends State<NewData> {
                                       ),
                                     ),
                                     Text(
-                                      snapshot.data.documents[index]['userName']
+                                      snapshot.data.documents[index]['FormuserName']
                                           .toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -158,7 +158,7 @@ class _NewDataState extends State<NewData> {
                                 padding: const EdgeInsets.only(
                                     top: 4, left: 20, right: 20),
                                 child: Text(
-                                  snapshot.data.documents[index]['userMobile'],
+                                  snapshot.data.documents[index]['FormuserMobile'],
                                   style: TextStyle(color: mainColor),
                                 ),
                               ),
@@ -169,7 +169,7 @@ class _NewDataState extends State<NewData> {
                                 padding: const EdgeInsets.only(
                                     top: 4, left: 20, right: 20),
                                 child: Text(
-                                  snapshot.data.documents[index]['class'],
+                                  snapshot.data.documents[index]['FormuserId'],
                                   style: TextStyle(color: mainColor),
                                 ),
                               ),
@@ -180,7 +180,7 @@ class _NewDataState extends State<NewData> {
                                 padding: const EdgeInsets.only(
                                     top: 4, left: 20, right: 20),
                                 child: Text(
-                                  snapshot.data.documents[index]['userMail'],
+                                  snapshot.data.documents[index]['FormuserMail'],
                                   style: TextStyle(color: mainColor),
                                 ),
                               ),
