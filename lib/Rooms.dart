@@ -143,7 +143,7 @@ class SignInToSeeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(image: decorationImage("bg3.png")),
+      decoration: BoxDecoration(image: decorationImage("g3.jpg")),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: Center(
