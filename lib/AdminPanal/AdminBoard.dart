@@ -5,6 +5,7 @@ import '../Decorations.dart';
 import '../colors.dart';
 import 'AccountsActivations.dart';
 import 'EditStudentData.dart';
+import 'StudentsData.dart';
 import 'years.dart';
 
 class AdminBoard extends StatelessWidget {
@@ -202,8 +203,32 @@ class AdminBoardBody extends StatelessWidget {
                 ),
               ),
             ),
-          )
-        ],
+          ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Material(
+          color: blueColor,
+          elevation: 10,
+          borderRadius: BorderRadiusDirectional.circular(10),
+          child: MaterialButton(
+            minWidth: MediaQuery.of(context).size.width * .75,
+            onPressed: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => StudentsData()));
+            },
+            child: Text(
+              "Students Data",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+
+      )],
       ),
     );
   }
