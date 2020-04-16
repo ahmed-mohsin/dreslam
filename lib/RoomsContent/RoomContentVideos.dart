@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dreslamelshahawy/UserScreens/Exam.dart';
+import 'package:dreslamelshahawy/component/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../AppDrawer.dart';
 import '../Decorations.dart';
@@ -67,18 +72,38 @@ class RoomContentVideo extends StatelessWidget {
   }
 }
 
-class RoomContentVideoStreamBuilder extends StatelessWidget {
+class RoomContentVideoStreamBuilder extends StatefulWidget {
   String roomCode;
 
   RoomContentVideoStreamBuilder(this.roomCode);
+  final roomDataBox = Hive.openBox("roomsData");
 
+  @override
+  _RoomContentVideoStreamBuilderState createState() => _RoomContentVideoStreamBuilderState();
+}
+
+class _RoomContentVideoStreamBuilderState extends State<RoomContentVideoStreamBuilder> {
+  String UID="";
+  @override
+  void initState() {
+    final roomDataBox = Hive.openBox("roomsData");
+
+    roomDataBox.then((data) {
+      setState(() {
+        UID = data.get("UID");
+      });
+
+      print(UID);
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
         child: StreamBuilder(
       stream: Firestore.instance
           .collection("Rooms")
-          .document("*$roomCode")
+          .document("*${widget.roomCode}")
           .collection("Videos")
           .where('show', isEqualTo: "on")
           .orderBy("createdAt", descending: true)
@@ -119,12 +144,10 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                               padding: const EdgeInsets.all(4.0),
                               child: Row(
                                 children: <Widget>[
-
                                   Container(
                                     child: Expanded(
                                       child: Text(
-                                        snapshot
-                                            .data.documents[index]['title']
+                                        snapshot.data.documents[index]['title']
                                             .toString(),
                                         style: TextStyle(
                                             color: mainColor, fontSize: 18),
@@ -158,40 +181,150 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                             Divider(
                               color: mainColor,
                             ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.only(left: 30, right: 30),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-
-                                  InkWell(onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => YoutubePlayerPage2(
-                                                snapshot.data.documents[index]['code'])));
-
-                                    Firestore.instance
-                                        .collection("Rooms")
-                                        .document("*$roomCode")
+                            InkWell(onTap: ()async{
+                              if (snapshot.data.documents[index]['needtest']==true) {
+                                ///Rooms/*101nozm/Videos/9pRz834i5vKOrOGUUYtd/tests/12012020
+                                String url=snapshot.data.documents[index]['examurl'];
+                                if (await canLaunch(url)) {
+                                  await launch(url,forceWebView: true,enableJavaScript: true,forceSafariVC: true,).then((_){
+                                    final snapShot = Firestore.instance
+                                        .collection('Rooms')
+                                        .document("*${widget.roomCode}")
                                         .collection("Videos")
                                         .document(snapshot.data.documents[index]['id'])
-                                        .updateData({"views": FieldValue.increment(1)});
-                                  },
+                                        .collection("tests")
+                                        .document(UID).setData({"passtest":"true"});
+
+
+                                  });
+                                } else {
+                                  throw 'Could not launch $url';
+                                }
+
+                              }else{
+                                flushBar(context, true,
+                                    sec: 60,
+                                    massage: "لايوجد امتحان لهذه المادة");
+                              }
+                            },
+                              child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    child: Text(
+                                      "Exam",
+                                      style: TextStyle(color: mainColor),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),Divider(
+                              color: mainColor,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 30, right: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  InkWell(
+                                    onTap: () async{
+
+                                      print(widget.roomCode);
+                                      print(snapshot.data.documents[index]['id'].toString());
+                                      print(UID);
+
+                                      final snapShot = await Firestore.instance
+                                          .collection('Rooms')
+                                          .document("*${widget.roomCode}")
+                                          .collection("Videos")
+                                          .document(snapshot.data.documents[index]['id'])
+                                          .collection("tests")
+                                          .document(UID)
+                                          .get();
+
+                                      if (snapShot == null || !snapShot.exists) {
+                                        flushBar(context, true,
+                                            sec: 60,
+                                            massage: "حل الامتحان الي فوق الأول عشان تقدر تشوف الفيديو");
+                                      }else{
+                                        Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      YoutubePlayerPage2(
+                                                          snapshot.data
+                                                                  .documents[
+                                                              index]['code'])));
+
+                                          Firestore.instance
+                                              .collection("Rooms")
+                                              .document("*${widget.roomCode}")
+                                              .collection("Videos")
+                                              .document(snapshot
+                                                  .data.documents[index]['id'])
+                                              .updateData({
+                                            "views": FieldValue.increment(1)
+                                          });
+                                      }
+
+
+//                                      DocumentReference checkTest = Firestore
+//                                          .instance
+//                                          .collection('Rooms')
+//                                          .document("*${widget.roomCode}")
+//                                          .collection("Videos")
+//                                          .document(snapshot.data.documents[index]['id'])
+//                                          .collection("tests")
+//                                          .document(UID);
+//                                      checkTest.get().then((data) {
+//                                        if (data == null) {
+//                                          print(
+//                                              ">>>>>>>>>>>.>>>>>>>> the user dont pass the test");
+//                                        } else if (data.data["pass"] == true) {
+//                                          print(
+//                                              "************************** the user  pass the test");
+//                                          Navigator.push(
+//                                              context,
+//                                              MaterialPageRoute(
+//                                                  builder: (_) =>
+//                                                      YoutubePlayerPage2(
+//                                                          snapshot.data
+//                                                                  .documents[
+//                                                              index]['code'])));
+//
+//                                          Firestore.instance
+//                                              .collection("Rooms")
+//                                              .document("*${widget.roomCode}")
+//                                              .collection("Videos")
+//                                              .document(snapshot
+//                                                  .data.documents[index]['id'])
+//                                              .updateData({
+//                                            "views": FieldValue.increment(1)
+//                                          });
+//                                        } else if (data.data["pass"] == false) {
+//                                          print(
+//                                              "///////////////////////////////// the user  didint pass the test marks");
+//                                        }
+//
+//                                      });
+                                    },
                                     child: Row(
-                                      children: <Widget>[Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
                                           child: Text(
                                             "Play The video",
                                             style: TextStyle(color: mainColor),
                                           ),
                                         ),
                                         Icon(
-                                        Icons.play_circle_filled,
-                                        color: mainColor,
-                                      ),
+                                          Icons.play_circle_filled,
+                                          color: mainColor,
+                                        ),
                                       ],
                                     ),
                                   ),

@@ -7,7 +7,7 @@ import '../colors.dart';
 
 Widget flushBar(context, bool goodresponse, {String massage, int sec}) {
   return Flushbar(
-    backgroundColor: goodresponse == true ? greenColor : redColor,
+    backgroundColor: goodresponse == true ? goldenColor : redColor,
     message: massage,
     duration: Duration(seconds: sec != null ? 2 : sec),
     icon: goodresponse == true
