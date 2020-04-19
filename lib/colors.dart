@@ -26,7 +26,7 @@ int getColorHexFromStr(String colorStr) {
 Color blueColor = Color(getColorHexFromStr('#203868'));
 Color greenColor = Color(getColorHexFromStr('#A2B710'));
 Color redColor = Color(getColorHexFromStr('#AA2728'));
-var mainColor= redColor;
+var mainColor= Colors.white;
 Color greyblackColor = Color(getColorHexFromStr("#313131"));
 Color yellowColor = Color(getColorHexFromStr('#EEDC00'));
 Color goldenColor = Color(getColorHexFromStr('#c8be9a'));

@@ -202,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: const EdgeInsets.all(8),
                           child: RoundedLoadingButton(
                             width: 200,
-                            color: mainColor,
+                            color: redColor,
                             controller: _btnController,
                             onPressed: () async {
                               if (!_formKey.currentState.validate()) {
@@ -472,7 +472,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 50,
                               width: MediaQuery.of(context).size.width * .40,
                               decoration: BoxDecoration(
-                                  color: mainColor,
+                                  color: redColor,
                                   borderRadius: BorderRadius.circular(20)),
                             ),
                           ),

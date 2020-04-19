@@ -267,7 +267,7 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => YoutubePlayerPage2(
+                                        builder: (_) => YoutubePlayerPage(
                                             snapshot.data.documents[index]
                                                 ['code'])));
                               },

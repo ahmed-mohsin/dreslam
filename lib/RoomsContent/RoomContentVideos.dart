@@ -251,6 +251,105 @@ class _RoomContentVideoStreamBuilderState extends State<RoomContentVideoStreamBu
                                             massage: "حل الامتحان الي فوق الأول عشان تقدر تشوف الفيديو");
                                       }else{
                                         Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    YoutubePlayerPage(
+                                                        snapshot.data
+                                                            .documents[
+                                                        index]['code'])));
+
+                                        Firestore.instance
+                                            .collection("Rooms")
+                                            .document("*${widget.roomCode}")
+                                            .collection("Videos")
+                                            .document(snapshot
+                                            .data.documents[index]['id'])
+                                            .updateData({
+                                          "views": FieldValue.increment(1)
+                                        });
+                                      }
+
+
+//                                      DocumentReference checkTest = Firestore
+//                                          .instance
+//                                          .collection('Rooms')
+//                                          .document("*${widget.roomCode}")
+//                                          .collection("Videos")
+//                                          .document(snapshot.data.documents[index]['id'])
+//                                          .collection("tests")
+//                                          .document(UID);
+//                                      checkTest.get().then((data) {
+//                                        if (data == null) {
+//                                          print(
+//                                              ">>>>>>>>>>>.>>>>>>>> the user dont pass the test");
+//                                        } else if (data.data["pass"] == true) {
+//                                          print(
+//                                              "************************** the user  pass the test");
+//                                          Navigator.push(
+//                                              context,
+//                                              MaterialPageRoute(
+//                                                  builder: (_) =>
+//                                                      YoutubePlayerPage2(
+//                                                          snapshot.data
+//                                                                  .documents[
+//                                                              index]['code'])));
+//
+//                                          Firestore.instance
+//                                              .collection("Rooms")
+//                                              .document("*${widget.roomCode}")
+//                                              .collection("Videos")
+//                                              .document(snapshot
+//                                                  .data.documents[index]['id'])
+//                                              .updateData({
+//                                            "views": FieldValue.increment(1)
+//                                          });
+//                                        } else if (data.data["pass"] == false) {
+//                                          print(
+//                                              "///////////////////////////////// the user  didint pass the test marks");
+//                                        }
+//
+//                                      });
+                                    },
+                                    child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Text(
+                                            "Play The video",
+                                            style: TextStyle(color: mainColor),
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.play_circle_filled,
+                                          color: mainColor,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                  ,InkWell(
+                                    onTap: () async{
+
+                                      print(widget.roomCode);
+                                      print(snapshot.data.documents[index]['id'].toString());
+                                      print(UID);
+
+                                      final snapShot = await Firestore.instance
+                                          .collection('Rooms')
+                                          .document("*${widget.roomCode}")
+                                          .collection("Videos")
+                                          .document(snapshot.data.documents[index]['id'])
+                                          .collection("tests")
+                                          .document(UID)
+                                          .get();
+
+                                      if (snapShot == null || !snapShot.exists) {
+                                        flushBar(context, true,
+                                            sec: 60,
+                                            massage: "حل الامتحان الي فوق الأول عشان تقدر تشوف الفيديو");
+                                      }else{
+                                        Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (_) =>
