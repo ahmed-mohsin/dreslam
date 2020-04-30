@@ -45,13 +45,13 @@ class _RoomsState extends State<Rooms> {
       builder: (BuildContext context) => new CupertinoAlertDialog(
         title: new Text(
           "الخروج من التطبيق",
-          style: TextStyle( fontFamily: 'arn',color: mainColor),
+          style: TextStyle( fontFamily: 'arn',color: redColor),
         ),
         content: Padding(
           padding: const EdgeInsets.only(top: 4),
           child: new Text("هل تود تسجيل الخروج من التطبيق ؟",
               style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.black,
                   //fontWeight: FontWeight.bold,
                   fontFamily: 'arn')),
         ),
@@ -60,7 +60,7 @@ class _RoomsState extends State<Rooms> {
             isDefaultAction: true,
             child: new Text(
               "إلغاء ",
-              style: TextStyle(fontFamily: 'arn',color: mainColor),
+              style: TextStyle(fontFamily: 'arn',color: redColor),
             ),
             onPressed: () async {
               Navigator.of(context).pop();
@@ -71,7 +71,7 @@ class _RoomsState extends State<Rooms> {
             isDefaultAction: false,
             child: new Text(
               "خروج",
-              style: TextStyle(fontFamily: 'arn',color: Colors.grey),
+              style: TextStyle(fontFamily: 'arn',color: Colors.black),
             ),
             onPressed: () async {
               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -155,12 +155,12 @@ class SignInToSeeContent extends StatelessWidget {
                 child: Text(
         "Sign in with activated Student account  \n  you must have at least one activated Material to see this section",
         textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+        style: TextStyle(fontWeight: FontWeight.bold, color: goldenColor),
       ),
               ),
               Padding(
                 padding: const EdgeInsets.all(18.0),
-                child: MaterialButton(color: goldenColor,child: Text("login",style: TextStyle(color: Colors.white),),onPressed: (){
+                child: MaterialButton(color: Colors.black,child: Text("login",style: TextStyle(color: Colors.white),),onPressed: (){
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
                 }),
               )

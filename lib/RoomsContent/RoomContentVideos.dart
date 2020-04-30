@@ -476,12 +476,12 @@ class _RoomContentVideoStreamBuilderState
                             ),
                             InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => Examm()));
+//                                  Navigator.push(
+//                                      context,
+//                                      MaterialPageRoute(
+//                                          builder: (_) => Examm()));
                                 },
-                                child: Text("test"))
+                                child: Text(""))
                           ],
                         ),
                       ),

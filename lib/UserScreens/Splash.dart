@@ -123,7 +123,7 @@ class _SplashState extends State<Splash> {
                     ),
                     checkHive == false
                         ? SpinKitCircle(
-                            color: mainColor,
+                            color: redColor,
                             size: 70,
                           )
                         : Container()

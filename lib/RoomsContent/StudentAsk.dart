@@ -155,7 +155,7 @@ class _AskStudentBodyState extends State<AskStudentBody> {
             Padding(
               padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
               child: RoundedLoadingButton(
-                color: mainColor,
+                color: Colors.black,
                 controller: btnController,
                 onPressed: () async {
                   if (!formKey.currentState.validate()) {
@@ -194,7 +194,7 @@ class _AskStudentBodyState extends State<AskStudentBody> {
                   ),
                   height: 50,
                   decoration: BoxDecoration(
-                      color: mainColor,
+                      color: Colors.black,
                       borderRadius: BorderRadius.circular(15)),
                 ),
               ),
