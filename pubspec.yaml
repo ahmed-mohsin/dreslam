@@ -31,16 +31,16 @@ dependencies:
   hive: ^1.4.1+1
   edge_alert: ^0.0.1
   path_provider: ^1.6.5
-  flushbar: ^1.9.1
+  flushbar: ^1.10.2
   md2_tab_indicator: ^1.0.2
   rflutter_alert: ^1.0.3
-  advance_pdf_viewer: any
+  advance_pdf_viewer: ^1.1.6
   status_alert: ^0.1.2
   google_nav_bar: ^2.0.0
   line_icons: ^0.2.0
   flutube: ^0.8.3
   url_launcher: ^5.4.2
-  youtube_player_flutter: ^6.1.0+7
+  youtube_player_flutter: ^6.1.1
 
 
 

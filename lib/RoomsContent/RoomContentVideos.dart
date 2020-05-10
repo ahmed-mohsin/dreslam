@@ -75,424 +75,176 @@ class RoomContentVideo extends StatelessWidget {
   }
 }
 
-class RoomContentVideoStreamBuilder extends StatefulWidget {
+class RoomContentVideoStreamBuilder extends StatelessWidget {
   String roomCode;
 
   RoomContentVideoStreamBuilder(this.roomCode);
-
-  final roomDataBox = Hive.openBox("roomsData");
-
-  @override
-  _RoomContentVideoStreamBuilderState createState() =>
-      _RoomContentVideoStreamBuilderState();
-}
-
-class _RoomContentVideoStreamBuilderState
-    extends State<RoomContentVideoStreamBuilder> {
-  String UID = "";
-
-  @override
-  void initState() {
-    final roomDataBox = Hive.openBox("roomsData");
-
-    roomDataBox.then((data) {
-      setState(() {
-        UID = data.get("UID");
-      });
-
-      print(UID);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
         child: StreamBuilder(
-      stream: Firestore.instance
-          .collection("Rooms")
-          .document("*${widget.roomCode}")
-          .collection("Videos")
-          .where('show', isEqualTo: "on")
-          .orderBy("createdAt", descending: true)
-          .snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return HndleError(context);
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Loader();
+          stream: Firestore.instance
+              .collection("Rooms")
+              .document("*$roomCode")
+              .collection("Videos")
+              .where('show', isEqualTo: "on")
+              .orderBy("createdAt", descending: true)
+              .snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) return HndleError(context);
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Loader();
 
-          default:
-            return new ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (_, index) {
-                if (snapshot.data.documents.length == 0) {
-                  return Text(
-                    "لا توجد مواد الآن",
-                    style: TextStyle(color: Colors.red),
-                  );
-                } else {
-                  return Padding(
-                    padding:
+              default:
+                return new ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (_, index) {
+                    if (snapshot.data.documents.length == 0) {
+                      return Text(
+                        "لا توجد مواد الآن",
+                        style: TextStyle(color: Colors.red),
+                      );
+                    } else {
+                      return Padding(
+                        padding:
                         const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                    child: new Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: mainColor),
-                          borderRadius: BorderRadius.circular(7),
-                          color: Colors.transparent),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    child: Expanded(
-                                      child: Text(
-                                        snapshot.data.documents[index]['title']
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: mainColor, fontSize: 18),
+                        child: new Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: mainColor),
+                              borderRadius: BorderRadius.circular(7),
+                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    children: <Widget>[
+
+                                      Container(
+                                        child: Expanded(
+                                          child: Text(
+                                            snapshot
+                                                .data.documents[index]['title']
+                                                .toString(),
+                                            style: TextStyle(
+                                                color: mainColor, fontSize: 18),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              color: mainColor,
-                            ),
-                            Padding(
-                              padding:
+                                ),
+                                Divider(
+                                  color: mainColor,
+                                ),
+                                Padding(
+                                  padding:
                                   const EdgeInsets.only(left: 30, right: 30),
-                              child: Row(
-                                mainAxisAlignment:
+                                  child: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    snapshot.data.documents[index]['name'],
-                                    style: TextStyle(color: Colors.grey),
+                                    children: <Widget>[
+                                      Text(
+                                        snapshot.data.documents[index]['name'],
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        " تمت مشاهدته ${snapshot.data.documents[index]['views'].toString()} مرة ",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    " تمت مشاهدته ${snapshot.data.documents[index]['views'].toString()} مرة ",
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              color: mainColor,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                if (snapshot.data.documents[index]
-                                        ['needtest'] ==
-                                    true) {
-                                  ///Rooms/*101nozm/Videos/9pRz834i5vKOrOGUUYtd/tests/12012020
-                                  String url =
-                                      snapshot.data.documents[index]['examurl'];
-                                  if (await canLaunch(url)) {
-                                    await launch(
-                                      url,
-                                      forceWebView: true,
-                                      enableJavaScript: true,
-                                      forceSafariVC: true,
-                                    ).then((_) {
-                                      final snapShot = Firestore.instance
-                                          .collection('Rooms')
-                                          .document("*${widget.roomCode}")
-                                          .collection("Videos")
-                                          .document(snapshot
-                                              .data.documents[index]['id'])
-                                          .collection("tests")
-                                          .document(UID)
-                                          .setData({"passtest": "true"});
-                                    });
-                                  } else {
-                                    throw 'Could not launch $url';
-                                  }
-                                } else {
-                                  flushBar(context, true,
-                                      sec: 60,
-                                      massage: "لايوجد امتحان لهذه المادة");
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Text(
-                                      "Exam",
-                                      style: TextStyle(color: mainColor),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              color: mainColor,
-                            ),
-                            Padding(
-                              padding:
+                                ),
+                                Divider(
+                                  color: mainColor,
+                                ),
+                                Padding(
+                                  padding:
                                   const EdgeInsets.only(left: 30, right: 30),
-                              child: Row(
-                                mainAxisAlignment:
+                                  child: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  InkWell(
-                                    onTap: () async {
-                                      if (snapshot.data.documents[index]
-                                              ['needtest'] ==
-                                          false) {
+                                    children: <Widget>[
+                                      InkWell(onTap: (){
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (_) =>
-                                                    YoutubePlayerPage(snapshot
-                                                            .data
-                                                            .documents[index]
-                                                        ['code'])));
+                                                builder: (_) => YoutubePlayerPage2(
+                                                    snapshot.data.documents[index]['code'])));
 
                                         Firestore.instance
                                             .collection("Rooms")
-                                            .document("*${widget.roomCode}")
+                                            .document("*$roomCode")
                                             .collection("Videos")
-                                            .document(snapshot
-                                                .data.documents[index]['id'])
-                                            .updateData({
-                                          "views": FieldValue.increment(1)
-                                        });
-                                      }
-                                      print(widget.roomCode);
-                                      print(snapshot.data.documents[index]['id']
-                                          .toString());
-                                      print(UID);
-
-                                      final snapShot = await Firestore.instance
-                                          .collection('Rooms')
-                                          .document("*${widget.roomCode}")
-                                          .collection("Videos")
-                                          .document(snapshot
-                                              .data.documents[index]['id'])
-                                          .collection("tests")
-                                          .document(UID)
-                                          .get();
-
-                                      if (snapShot == null ||
-                                          !snapShot.exists) {
-                                        flushBar(context, true,
-                                            sec: 60,
-                                            massage:
-                                                "حل الامتحان الي فوق الأول عشان تقدر تشوف الفيديو");
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    YoutubePlayerPage(snapshot
-                                                            .data
-                                                            .documents[index]
-                                                        ['code'])));
-
-                                        Firestore.instance
-                                            .collection("Rooms")
-                                            .document("*${widget.roomCode}")
-                                            .collection("Videos")
-                                            .document(snapshot
-                                                .data.documents[index]['id'])
-                                            .updateData({
-                                          "views": FieldValue.increment(1)
-                                        });
-                                      }
-
-//                                      DocumentReference checkTest = Firestore
-//                                          .instance
-//                                          .collection('Rooms')
-//                                          .document("*${widget.roomCode}")
-//                                          .collection("Videos")
-//                                          .document(snapshot.data.documents[index]['id'])
-//                                          .collection("tests")
-//                                          .document(UID);
-//                                      checkTest.get().then((data) {
-//                                        if (data == null) {
-//                                          print(
-//                                              ">>>>>>>>>>>.>>>>>>>> the user dont pass the test");
-//                                        } else if (data.data["pass"] == true) {
-//                                          print(
-//                                              "************************** the user  pass the test");
-//                                          Navigator.push(
-//                                              context,
-//                                              MaterialPageRoute(
-//                                                  builder: (_) =>
-//                                                      YoutubePlayerPage2(
-//                                                          snapshot.data
-//                                                                  .documents[
-//                                                              index]['code'])));
-//
-//                                          Firestore.instance
-//                                              .collection("Rooms")
-//                                              .document("*${widget.roomCode}")
-//                                              .collection("Videos")
-//                                              .document(snapshot
-//                                                  .data.documents[index]['id'])
-//                                              .updateData({
-//                                            "views": FieldValue.increment(1)
-//                                          });
-//                                        } else if (data.data["pass"] == false) {
-//                                          print(
-//                                              "///////////////////////////////// the user  didint pass the test marks");
-//                                        }
-//
-//                                      });
-                                    },
-                                    child: Row(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Text(
-                                            "Play The video",
-                                            style: TextStyle(color: mainColor),
+                                            .document(snapshot.data.documents[index]['id'])
+                                            .updateData({"views": FieldValue.increment(1)});
+                                      },
+                                        child: Row(
+                                          children: <Widget>[Icon(
+                                            Icons.play_circle_filled,
+                                            color: mainColor,
                                           ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                                              child: Text(
+                                                "Player2",
+                                                style: TextStyle(color: Colors.grey),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Icon(
-                                          Icons.play_circle_filled,
-                                          color: mainColor,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      print(widget.roomCode);
-                                      print(snapshot.data.documents[index]['id']
-                                          .toString());
-                                      print(UID);
-
-                                      final snapShot = await Firestore.instance
-                                          .collection('Rooms')
-                                          .document("*${widget.roomCode}")
-                                          .collection("Videos")
-                                          .document(snapshot
-                                              .data.documents[index]['id'])
-                                          .collection("tests")
-                                          .document(UID)
-                                          .get();
-
-                                      if (snapShot == null ||
-                                          !snapShot.exists) {
-                                        flushBar(context, true,
-                                            sec: 60,
-                                            massage:
-                                                "حل الامتحان الي فوق الأول عشان تقدر تشوف الفيديو");
-                                      } else {
+                                      ),
+                                      InkWell(onTap: (){
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (_) =>
-                                                    YoutubePlayerPage2(snapshot
-                                                            .data
-                                                            .documents[index]
-                                                        ['code'])));
+                                                builder: (_) => YoutubePlayerPage(
+                                                    snapshot.data.documents[index]['code'])));
 
                                         Firestore.instance
                                             .collection("Rooms")
-                                            .document("*${widget.roomCode}")
+                                            .document("*$roomCode")
                                             .collection("Videos")
-                                            .document(snapshot
-                                                .data.documents[index]['id'])
-                                            .updateData({
-                                          "views": FieldValue.increment(1)
-                                        });
-                                      }
-
-//                                      DocumentReference checkTest = Firestore
-//                                          .instance
-//                                          .collection('Rooms')
-//                                          .document("*${widget.roomCode}")
-//                                          .collection("Videos")
-//                                          .document(snapshot.data.documents[index]['id'])
-//                                          .collection("tests")
-//                                          .document(UID);
-//                                      checkTest.get().then((data) {
-//                                        if (data == null) {
-//                                          print(
-//                                              ">>>>>>>>>>>.>>>>>>>> the user dont pass the test");
-//                                        } else if (data.data["pass"] == true) {
-//                                          print(
-//                                              "************************** the user  pass the test");
-//                                          Navigator.push(
-//                                              context,
-//                                              MaterialPageRoute(
-//                                                  builder: (_) =>
-//                                                      YoutubePlayerPage2(
-//                                                          snapshot.data
-//                                                                  .documents[
-//                                                              index]['code'])));
-//
-//                                          Firestore.instance
-//                                              .collection("Rooms")
-//                                              .document("*${widget.roomCode}")
-//                                              .collection("Videos")
-//                                              .document(snapshot
-//                                                  .data.documents[index]['id'])
-//                                              .updateData({
-//                                            "views": FieldValue.increment(1)
-//                                          });
-//                                        } else if (data.data["pass"] == false) {
-//                                          print(
-//                                              "///////////////////////////////// the user  didint pass the test marks");
-//                                        }
-//
-//                                      });
-                                    },
-                                    child: Row(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          child: Text(
-                                            "Play The video",
-                                            style: TextStyle(color: mainColor),
+                                            .document(snapshot.data.documents[index]['id'])
+                                            .updateData({"views": FieldValue.increment(1)});
+                                      },
+                                        child: Row(
+                                          children: <Widget>[Icon(
+                                            Icons.play_circle_filled,
+                                            color: mainColor,
                                           ),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                                              child: Text(
+                                                "Player1",
+                                                style: TextStyle(color: Colors.grey),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Icon(
-                                          Icons.play_circle_filled,
-                                          color: mainColor,
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            InkWell(
-                                onTap: () {
-//                                  Navigator.push(
-//                                      context,
-//                                      MaterialPageRoute(
-//                                          builder: (_) => Examm()));
-                                },
-                                child: Text(""))
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                }
-              },
-            );
-        }
-      },
-    ));
+                      );
+                    }
+                  },
+                );
+            }
+          },
+        ));
   }
 }
 
