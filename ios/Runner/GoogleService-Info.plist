@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>151382205216-7itttidq3nr5ugqk0e78n14vn0lvo70b.apps.googleusercontent.com</string>
+	<string>151382205216-qntfueddu0hqaplh9bl39h8hfcirjmqu.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.151382205216-7itttidq3nr5ugqk0e78n14vn0lvo70b</string>
+	<string>com.googleusercontent.apps.151382205216-qntfueddu0hqaplh9bl39h8hfcirjmqu</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>151382205216-stj27l5au7eldaib5kqo3kfojd1l4npu.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ahmedmohsin.dreslam</string>
+	<string>com-ahmedmohsin-eslamelshahawycenter</string>
 	<key>PROJECT_ID</key>
 	<string>dreslamelshahawy</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:151382205216:ios:b78f0586f1dc563447ed45</string>
+	<string>1:151382205216:ios:c07953aaa22f331547ed45</string>
 	<key>DATABASE_URL</key>
 	<string>https://dreslamelshahawy.firebaseio.com</string>
 </dict>
