@@ -586,34 +586,92 @@ class _LoginScreenState extends State<LoginScreen> {
               if (!formKey.currentState.validate()) {
                 return;
               } else {
+
                 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
-                AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-                print(
-                    'Running on ${androidInfo.brand}  ${androidInfo.model}  ${androidInfo.androidId}');
+                if (Platform.isAndroid) {
+                  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+                  print(androidInfo.androidId);
+                  print(androidInfo.board);
+                  print(androidInfo.bootloader);
+                  print("brand>>>>>>>>>>>>>>>>>>>>>>>." + androidInfo.brand);
+                  print("device>>>>>>>>>>>>>>>>>>>>>>>>" + androidInfo.device);
+                  print(androidInfo.display);
+                  print(androidInfo.fingerprint);
+                  print(androidInfo.hardware);
+                  print(androidInfo.host);
+                  print(androidInfo.id);
+                  print(androidInfo.isPhysicalDevice);
+                  print(androidInfo.manufacturer);
+                  print("model>>>>>>>>>>>>>>>>>>>>>>>" + androidInfo.model);
+                  print(androidInfo.product);
+                  print(androidInfo.type);
+                  print(androidInfo.version.toString());
+                  deviceiD = androidInfo.model + "  ## " + androidInfo.androidId;
+                  print('Running on $deviceiD');
+                  print(
+                      'Running on ${androidInfo.brand}  ${androidInfo.model}  ${androidInfo.androidId}');
 
-                Firestore.instance
-                    .collection('UsersID')
-                    .document(UID)
-                    .updateData({
-                  "avaliable":false,
-                  'FormuserName': _name.text,
-                  'FormuserMail': _mail.text,
-                  'FormuserMobile': _mobile.text,
-                  "FormuserId": userId,
-                  "Form login at": FieldValue.serverTimestamp(),
-                  "Form deviceId": "${androidInfo.brand}=>${androidInfo.model}",
-                }).then((data) {
+                  Firestore.instance
+                      .collection('UsersID')
+                      .document(UID)
+                      .updateData({
+                    "avaliable":false,
+                    'FormuserName': _name.text,
+                    'FormuserMail': _mail.text,
+                    'FormuserMobile': _mobile.text,
+                    "FormuserId": userId,
+                    "Form login at": FieldValue.serverTimestamp(),
+                    "Form deviceId": "${androidInfo.brand}=>${androidInfo.model}",
+                  }).then((data) {
 
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            HomePage()),
-                        (Route<dynamic> route) => false,
-                  );
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage()),
+                          (Route<dynamic> route) => false,
+                    );
 
-                });
+                  });
+
+                } else if (Platform.isIOS) {
+                  IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+                  print(">>>>>>utsname${iosInfo.utsname}");
+                  print(iosInfo.model);
+                  print(iosInfo.identifierForVendor);
+                  print(iosInfo.localizedModel);
+                  print(iosInfo.name);
+                  print(iosInfo.systemName);
+                  print(iosInfo.systemVersion);
+                  print("${iosInfo.model}" + "${iosInfo.identifierForVendor}");
+                  deviceiD =
+                      "${iosInfo.model}" + "  ## " + "${iosInfo.identifierForVendor}";
+                  Firestore.instance
+                      .collection('UsersID')
+                      .document(UID)
+                      .updateData({
+                    "avaliable":false,
+                    'FormuserName': _name.text,
+                    'FormuserMail': _mail.text,
+                    'FormuserMobile': _mobile.text,
+                    "FormuserId": userId,
+                    "Form login at": FieldValue.serverTimestamp(),
+                    "Form deviceId": "${iosInfo.identifierForVendor}=>${iosInfo.model}",
+                  }).then((data) {
+
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage()),
+                          (Route<dynamic> route) => false,
+                    );
+
+                  });
+                }
+
+
               }
             },
           );
