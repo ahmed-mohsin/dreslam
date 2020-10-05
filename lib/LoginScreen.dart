@@ -908,7 +908,7 @@ String studentYear;
                   'FormuserMail': _mail.text,
                   'FormuserMobile': _mobile.text,
                   "studentYear":studentYear,
-                _btnController.success();
+
                 }).then((data) {
 
                   Navigator.pushAndRemoveUntil(
@@ -921,7 +921,7 @@ String studentYear;
 
                 });
 
-
+                _btnController.success();
 
               }
             },
