@@ -29,7 +29,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 //  FirebaseUser user;
   String deviceiD;
-
+String studentYear;
   String loadingPhase;
   bool rememberMe;
   final RoundedLoadingButtonController _btnController =
@@ -143,24 +143,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 10,
                         ),
                         Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: TextFormField(
-                              enableSuggestions: true,
-                              style: TextStyle(color: Colors.white),
-                              controller: userController,
-                              textAlign: TextAlign.start,
-                              decoration: InputDecoration.collapsed(
-                                  hintText: "E-MaiL",
-                                  hintStyle: TextStyle(
-                                    color: Colors.white70,
-                                  )),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter correct User';
-                                }
-                                return null;
-                              },
+                          height: 40,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: TextFormField(
+                                enableSuggestions: true,
+                                style: TextStyle(color: Colors.white),
+                                controller: userController,
+                                textAlign: TextAlign.start,
+                                decoration: InputDecoration.collapsed(
+                                    hintText: "E-MaiL",
+                                    hintStyle: TextStyle(
+                                      color: Colors.white70,
+                                    )),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter correct User';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
                           ),
                           width: MediaQuery.of(context).size.width * .75,
@@ -171,23 +174,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           height: 12,
                         ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: TextFormField(
-                              obscureText: true,
-                              style: TextStyle(color: Colors.white),
-                              controller: passwordController,
-                              textAlign: TextAlign.start,
-                              decoration: InputDecoration.collapsed(
-                                  hintText: "Password",
-                                  hintStyle: TextStyle(color: Colors.white70)),
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please enter right password';
-                                }
-                                return null;
-                              },
+                        Container(height: 40,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: TextFormField(
+                                obscureText: true,
+                                style: TextStyle(color: Colors.white),
+                                controller: passwordController,
+                                textAlign: TextAlign.start,
+                                decoration: InputDecoration.collapsed(
+                                    hintText: "Password",
+                                    hintStyle: TextStyle(color: Colors.white70)),
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please enter right password';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
                           ),
                           width: MediaQuery.of(context).size.width * .75,
@@ -199,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 3,
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(top: 4),
                           child: RoundedLoadingButton(
                             width: 200,
                             color: redColor,
@@ -477,6 +482,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(", Register as A New User",style: TextStyle(color: goldenColor,decoration: TextDecoration.underline),),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 120),
                           child: RoundedLoadingButton(
@@ -495,8 +505,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               roomDataBox.put("roomsName", []);
                               roomDataBox.put("roomsCode", []);
 //
-                              Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (_) => HomePage()));
+//                               Navigator.pushReplacement(context,
+//                                   MaterialPageRoute(builder: (_) => HomePage()));
+                              showAlertDialogReg(
+                              context:context );
+
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * .40,
@@ -818,7 +831,232 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
   }
+  showAlertDialogReg({
+    BuildContext context, String userId, var roomName, var roomsCode,var UID}) {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          final _name = TextEditingController();
+          final _mail = TextEditingController();
+          final _mobile = TextEditingController();
+          final formKey = GlobalKey<FormState>();
+          bool _termsChecked = false;
+          String genderType = "male";
 
+          int radioValue = -1;
+          bool _autoValidate = false;
+          void _validateInputs() {
+            final form = formKey.currentState;
+            if (form.validate()) {
+              // Text forms has validated.
+              // Let's validate radios and checkbox
+              if (radioValue < 0) {
+                print("Please select your gender");
+                // None of the radio buttons was selected
+                // _showSnackBar('Please select your gender');
+              } else if (!_termsChecked) {
+                // The checkbox wasn't checked
+                print("Please select your hghghg");
+                //_showSnackBar("Please accept our terms");
+              } else {
+                // Every of the data in the form are valid at this point
+                form.save();
+              }
+            } else {
+              setState(() => _autoValidate = true);
+            }
+          }
+
+          void validateInputs() {
+            final form = formKey.currentState;
+            if (form.validate()) {
+              // Text forms was validated.
+              form.save();
+            } else {
+              setState(() => _autoValidate = true);
+            }
+          }
+
+          int _radioValue1 = 0;
+          void _handleRadioValueChange1(int value) {
+            setState(() {
+              _radioValue1 = value;
+            });
+          }
+
+          // set up the buttons
+          Widget cancelButton = FlatButton(
+            child: Text("Cancel",style: TextStyle(color: mainColor),),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          );
+          Widget continueButton = FlatButton(
+            child: Text("Continue",style: TextStyle(color: mainColor),),
+            onPressed: () async {
+              if (!formKey.currentState.validate()) {
+                return;
+              } else {
+
+                Firestore.instance
+                    .collection('UsersID2021')
+                    .document(_mobile.text)
+                    .setData({
+
+                  'FormuserName': _name.text,
+                  'FormuserMail': _mail.text,
+                  'FormuserMobile': _mobile.text,
+                  "studentYear":studentYear,
+
+                }).then((data) {
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            HomePage()),
+                        (Route<dynamic> route) => false,
+                  );
+
+                });
+
+
+
+              }
+            },
+          );
+
+          String _dropDownValue;
+          return AlertDialog(
+            actions: [
+              cancelButton,
+              continueButton,
+            ],
+            content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+
+                return SizedBox(
+                  height: 400,
+                  child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Card(
+                        //color: Colors.white,
+                        elevation: 0,
+                        child: Form(
+                          autovalidate: _autoValidate,
+                          key: formKey,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("من فضلك ادخل هذه البيانات"),
+                                Container(
+                                  width: MediaQuery.of(context).size.width * .7,
+                                  height: 85,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.text,
+                                    controller: _name,
+                                    validator: (value) {
+                                      if (value.length < 7)
+                                        return 'اكتب اسم صحيح';
+                                      else if (value.isEmpty) {
+                                        return ' *اكتب الإسم';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                        labelText: "الاسم",
+                                        filled: true,
+                                        fillColor: Colors.grey.shade50),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.only(top: 4, bottom: 4),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * .7,
+                                    height: 85,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.emailAddress,
+                                      controller: _mail,
+                                      validator: (value) {
+                                        Pattern pattern =
+                                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                        RegExp regex = new RegExp(pattern);
+                                        if (!regex.hasMatch(value))
+                                          return 'اكتب ايميل صحيح';
+                                        else
+                                          return null;
+                                      },
+                                      decoration: InputDecoration(
+                                          labelText: "الايميل الشخصي",
+                                          filled: true,
+                                          fillColor: Colors.grey.shade50),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width * .7,
+                                  height: 85,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: _mobile,
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return ' *اكتب الموبايل';
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                        labelText: "الموبايل",
+                                        filled: true,
+                                        fillColor: Colors.grey.shade50),
+                                  ),
+                                ),
+                                DropdownButton(
+                                  hint: _dropDownValue == null
+                                      ? Text('اختر الفرقة الدراسية')
+                                      : Text(
+                                    _dropDownValue,
+                                    style: TextStyle(color: mainColor),
+                                  ),
+                                  isExpanded: true,
+                                  iconSize: 30.0,
+                                  style: TextStyle(color: mainColor),
+                                  items: ['الاولي', 'الثانية', 'الثالثة',"الرابعة"].map(
+                                        (val) {
+                                      return DropdownMenuItem<String>(
+                                        value: val,
+                                        child: Text(val,textDirection: TextDirection.rtl,),
+                                      );
+                                    },
+                                  ).toList(),
+                                  onChanged: (val) {
+                                    setState(
+                                          () {
+                                        _dropDownValue = val;
+                                        studentYear =val;
+                                        print(studentYear);
+                                      },
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
+  }
 }
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
