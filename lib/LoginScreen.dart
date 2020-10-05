@@ -889,6 +889,7 @@ String studentYear;
             child: Text("Cancel",style: TextStyle(color: mainColor),),
             onPressed: () {
               Navigator.pop(context);
+              _btnController.reset();
             },
           );
           Widget continueButton = FlatButton(
@@ -907,7 +908,7 @@ String studentYear;
                   'FormuserMail': _mail.text,
                   'FormuserMobile': _mobile.text,
                   "studentYear":studentYear,
-
+                _btnController.success();
                 }).then((data) {
 
                   Navigator.pushAndRemoveUntil(
