@@ -503,7 +503,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
+                          child: Platform.isAndroid==true?Container():Text(
                             ", Register as A New User",
                             style: TextStyle(
                                 color: goldenColor,
