@@ -1019,7 +1019,7 @@ setState(() {
                                 ),
                                 DropdownButton(
                                   hint: _dropDownValue == null
-                                      ? Text('اختر الفرقة الدراسية')
+                                      ? Text('اختر الفرقة الدراسية',style: TextStyle(color:redColor),)
                                       : Text(
                                     _dropDownValue,
                                     style: TextStyle(color: mainColor),
@@ -1031,7 +1031,7 @@ setState(() {
                                         (val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val,textDirection: TextDirection.rtl,),
+                                        child: Text(val,textDirection: TextDirection.rtl,style: TextStyle(color: greyblackColor,fontWeight: FontWeight.bold),),
                                       );
                                     },
                                   ).toList(),
