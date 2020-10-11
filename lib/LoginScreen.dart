@@ -32,9 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   String loadingPhase;
   bool rememberMe;
   final RoundedLoadingButtonController _btnController =
-  new RoundedLoadingButtonController();
+      new RoundedLoadingButtonController();
   final RoundedLoadingButtonController _btn2Controller =
-  new RoundedLoadingButtonController();
+      new RoundedLoadingButtonController();
   final _formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   var userController = TextEditingController();
@@ -94,11 +94,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     widget.cashedUserController != null
         ? userController =
-    new TextEditingController(text: widget.cashedUserController)
+            new TextEditingController(text: widget.cashedUserController)
         : TextEditingController(text: '');
     widget.cashedUserPasswordController != null
         ? passwordController =
-    new TextEditingController(text: widget.cashedUserPasswordController)
+            new TextEditingController(text: widget.cashedUserPasswordController)
         : TextEditingController(text: '');
   }
 
@@ -134,8 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Container(
                             height: 200,
                             width: 200,
-                            decoration:
-                            BoxDecoration(image: decorationImage("logo.png")),
+                            decoration: BoxDecoration(
+                                image: decorationImage("logo.png")),
                           ),
                         ),
                         SizedBox(
@@ -173,7 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           height: 12,
                         ),
-                        Container(height: 40,
+                        Container(
+                          height: 40,
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8),
@@ -184,7 +185,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration.collapsed(
                                     hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.white70)),
+                                    hintStyle:
+                                        TextStyle(color: Colors.white70)),
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'Please enter right password';
@@ -220,7 +222,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               _formKey.currentState.save();
 
                               try {
-                                final FirebaseAuth _auth = FirebaseAuth.instance;
+                                final FirebaseAuth _auth =
+                                    FirebaseAuth.instance;
                                 user = (await _auth.signInWithEmailAndPassword(
                                   email: userController.text,
                                   password: passwordController.text,
@@ -234,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     if (data.exists) {
                                       setState(() {
                                         loadingPhase =
-                                        "Checking app version .....";
+                                            "Checking app version .....";
                                         print(loadingPhase);
                                       });
                                       //check app version
@@ -247,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             .updateData({
                                           "users": FieldValue.increment(1),
                                           "usersv$AndroidcurrentVersion":
-                                          FieldValue.increment(1)
+                                              FieldValue.increment(1)
                                         });
 
                                         roomDataBox.put("cashedUserController",
@@ -270,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     AdminBoard()),
-                                                (Route<dynamic> route) => false,
+                                            (Route<dynamic> route) => false,
                                           );
                                           print(roomDataBox.get("LoginType"));
                                           print(roomDataBox.get("roomsName"));
@@ -284,10 +287,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                           }
                                         }
 
-                                        DocumentReference getUserdata = Firestore
-                                            .instance
-                                            .collection('UsersID')
-                                            .document(user.email.substring(0, 8));
+                                        DocumentReference getUserdata =
+                                            Firestore.instance
+                                                .collection('UsersID')
+                                                .document(
+                                                    user.email.substring(0, 8));
                                         getUserdata.get().then((data) {
                                           if (data == null) {
                                             flushBar(context, false,
@@ -298,7 +302,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             if (data.data["registeredPhone"] ==
                                                 deviceiD) {
                                               print("matching device id ");
-                                              print("show the alertdailog == ${data.data["avaliable"]}");
+                                              print(
+                                                  "show the alertdailog == ${data.data["avaliable"]}");
                                               roomDataBox.put("roomsName",
                                                   data.data["roomsName"]);
                                               roomDataBox.put("roomsCode",
@@ -309,25 +314,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   "UID", data.data["userId"]);
                                               print(
                                                   "===>>>>>>>>>>>>>${data.data["userId"]}");
-                                              if (data.data["avaliable"]==true) {
-                                                showAlertDialog(context: context,UID:data.data["userId"],roomName:data.data["roomsName"],userId:data.data["userId"]   );
-
-                                              }  else {
+                                              if (data.data["avaliable"] ==
+                                                  true) {
+                                                showAlertDialog(
+                                                    context: context,
+                                                    UID: data.data["userId"],
+                                                    roomName:
+                                                        data.data["roomsName"],
+                                                    userId:
+                                                        data.data["userId"]);
+                                              } else {
                                                 Navigator.pushAndRemoveUntil(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           HomePage()),
-                                                      (Route<dynamic> route) => false,
+                                                  (Route<dynamic> route) =>
+                                                      false,
                                                 );
-
                                               }
 
-
-
-                                              print(roomDataBox.get("LoginType"));
-                                              print(roomDataBox.get("roomsName"));
-                                              print(roomDataBox.get("roomsName"));
+                                              print(
+                                                  roomDataBox.get("LoginType"));
+                                              print(
+                                                  roomDataBox.get("roomsName"));
+                                              print(
+                                                  roomDataBox.get("roomsName"));
 
                                               if (rememberMe == true) {
                                                 roomDataBox.put(
@@ -340,7 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                               _btnController.reset();
                                             } else if (data
-                                                .data["registeredPhone"] ==
+                                                    .data["registeredPhone"] ==
                                                 "empty") {
                                               print(
                                                   "empty the phone not regesterd yet click to register it ");
@@ -353,7 +365,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                               _btnController.reset();
                                             } else if (data
-                                                .data["registeredPhone"] ==
+                                                    .data["registeredPhone"] ==
                                                 "any") {
                                               print("matching device id ");
                                               roomDataBox.put("roomsName",
@@ -370,25 +382,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         HomePage()),
-                                                    (Route<dynamic> route) => false,
+                                                (Route<dynamic> route) => false,
                                               );
 
                                               _btnController.reset();
                                             } else if (data
-                                                .data["registeredPhone"] ==
+                                                    .data["registeredPhone"] ==
                                                 "wait") {
                                               print("old account");
                                               flushBar(context, false,
                                                   sec: 1200,
                                                   massage:
-                                                  "تم ارسال طلبك للتفعيل من قبل , انتظر تفعيله من عند الاداره");
+                                                      "تم ارسال طلبك للتفعيل من قبل , انتظر تفعيله من عند الاداره");
                                               _btnController.reset();
                                             } else {
                                               print("old account");
                                               flushBar(context, false,
                                                   sec: 60,
                                                   massage:
-                                                  "هذا الحساب لم يعد يعمل  الاتصال بالاداره ");
+                                                      "هذا الحساب لم يعد يعمل  الاتصال بالاداره ");
                                               _btnController.reset();
                                             }
                                           }
@@ -401,7 +413,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           child: flushBar(context, false,
                                               sec: 2000,
                                               massage:
-                                              "يوجد نسخة جديدة من التطبيق رجاء قم بتحديث هذه النسخة اولا "),
+                                                  "يوجد نسخة جديدة من التطبيق رجاء قم بتحديث هذه النسخة اولا "),
                                         );
                                         _btnController.reset();
                                       }
@@ -415,32 +427,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                   switch (e.code) {
                                     case "ERROR_USER_DISABLED":
                                       errorType =
-                                      " هذا الحساب تم ايقافه من قبل الادارة الرجاء الاتصال بنا ";
+                                          " هذا الحساب تم ايقافه من قبل الادارة الرجاء الاتصال بنا ";
                                       break;
                                     case "ERROR_TOO_MANY_REQUESTS":
                                       errorType =
-                                      " Too  Many Request Try again later  ";
+                                          " Too  Many Request Try again later  ";
                                       break;
                                     case "ERROR_INVALID_EMAIL":
                                       errorType =
-                                      "تأكد من كتابه الايميل بطريقه صحيحة";
+                                          "تأكد من كتابه الايميل بطريقه صحيحة";
                                       break;
                                     case 'ERROR_USER_NOT_FOUND':
-                                      errorType = "اسم المستخدم او الباسورد خطأ";
+                                      errorType =
+                                          "اسم المستخدم او الباسورد خطأ";
                                       break;
                                     case 'There is no user record corresponding to this identifier. The user may have been deleted.':
                                       errorType = "The User iZ Not Found";
                                       break;
                                     case 'ERROR_WRONG_PASSWORD':
-                                      errorType = "اسم المستخدم او الباسورد خطأ";
+                                      errorType =
+                                          "اسم المستخدم او الباسورد خطأ";
                                       break;
                                     case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
                                       errorType = "NetworkError";
                                       break;
-                                  // ...
+                                    // ...
                                     default:
                                       errorType =
-                                      "INVALID_EMAIL or Connection Error Try again Later ";
+                                          "INVALID_EMAIL or Connection Error Try again Later ";
                                   }
                                 } else if (Platform.isIOS) {
                                   switch (e.code) {
@@ -453,10 +467,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     case 'Error 17020':
                                       errorType = "NetworkError";
                                       break;
-                                  // ...
+                                    // ...
                                     default:
                                       errorType =
-                                      "Connection Error Try again Later ";
+                                          "Connection Error Try again Later ";
                                   }
                                 }
                                 print('The error is $errorType');
@@ -470,8 +484,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 "Log In",
                                 textAlign: TextAlign.center,
-                                style:
-                                TextStyle(fontSize: 20, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
                               ),
                               height: 50,
                               width: MediaQuery.of(context).size.width * .40,
@@ -481,10 +495,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(", Register as A New User",style: TextStyle(color: goldenColor,decoration: TextDecoration.underline),),
+                          child: Text(
+                            ", Register as A New User",
+                            style: TextStyle(
+                                color: goldenColor,
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 120),
@@ -506,17 +524,15 @@ class _LoginScreenState extends State<LoginScreen> {
 //
 //                               Navigator.pushReplacement(context,
 //                                   MaterialPageRoute(builder: (_) => HomePage()));
-                              showAlertDialogReg(
-                                  context:context );
-
+                              showAlertDialogReg(context: context);
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * .40,
                               child: Text(
                                 "Or aVisitor",
                                 textAlign: TextAlign.center,
-                                style:
-                                TextStyle(fontSize: 14, color: Colors.white),
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
                               ),
                             ),
                           ),
@@ -532,8 +548,13 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  showAlertDialog({
-    BuildContext context, String userId, var roomName, var roomsCode,var UID}) {
+
+  showAlertDialog(
+      {BuildContext context,
+      String userId,
+      var roomName,
+      var roomsCode,
+      var UID}) {
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -587,18 +608,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // set up the buttons
           Widget cancelButton = FlatButton(
-            child: Text("Cancel",style: TextStyle(color: mainColor),),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: mainColor),
+            ),
             onPressed: () {
               Navigator.pop(context);
             },
           );
           Widget continueButton = FlatButton(
-            child: Text("Continue",style: TextStyle(color: mainColor),),
+            child: Text(
+              "Continue",
+              style: TextStyle(color: mainColor),
+            ),
             onPressed: () async {
               if (!formKey.currentState.validate()) {
                 return;
               } else {
-
                 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
                 if (Platform.isAndroid) {
@@ -619,7 +645,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   print(androidInfo.product);
                   print(androidInfo.type);
                   print(androidInfo.version.toString());
-                  deviceiD = androidInfo.model + "  ## " + androidInfo.androidId;
+                  deviceiD =
+                      androidInfo.model + "  ## " + androidInfo.androidId;
                   print('Running on $deviceiD');
                   print(
                       'Running on ${androidInfo.brand}  ${androidInfo.model}  ${androidInfo.androidId}');
@@ -628,25 +655,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       .collection('UsersID')
                       .document(UID)
                       .updateData({
-                    "avaliable":false,
+                    "avaliable": false,
                     'FormuserName': _name.text,
                     'FormuserMail': _mail.text,
                     'FormuserMobile': _mobile.text,
                     "FormuserId": userId,
                     "Form login at": FieldValue.serverTimestamp(),
-                    "Form deviceId": "${androidInfo.brand}=>${androidInfo.model}",
+                    "Form deviceId":
+                        "${androidInfo.brand}=>${androidInfo.model}",
                   }).then((data) {
-
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage()),
-                          (Route<dynamic> route) => false,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
                     );
-
                   });
-
                 } else if (Platform.isIOS) {
                   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
                   print(">>>>>>utsname${iosInfo.utsname}");
@@ -657,37 +680,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   print(iosInfo.systemName);
                   print(iosInfo.systemVersion);
                   print("${iosInfo.model}" + "${iosInfo.identifierForVendor}");
-                  deviceiD =
-                      "${iosInfo.model}" + "  ## " + "${iosInfo.identifierForVendor}";
+                  deviceiD = "${iosInfo.model}" +
+                      "  ## " +
+                      "${iosInfo.identifierForVendor}";
                   Firestore.instance
                       .collection('UsersID')
                       .document(UID)
                       .updateData({
-                    "avaliable":false,
+                    "avaliable": false,
                     'FormuserName': _name.text,
                     'FormuserMail': _mail.text,
                     'FormuserMobile': _mobile.text,
                     "FormuserId": userId,
                     "Form login at": FieldValue.serverTimestamp(),
-                    "Form deviceId": "${iosInfo.identifierForVendor}=>${iosInfo.model}",
+                    "Form deviceId":
+                        "${iosInfo.identifierForVendor}=>${iosInfo.model}",
                   }).then((data) {
-
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage()),
-                          (Route<dynamic> route) => false,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
                     );
-
                   });
                 }
-
-
               }
             },
           );
-
 
           return AlertDialog(
             actions: [
@@ -711,9 +729,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("ادخل البيانات بدقه حتي تكتمل عملية التفعيل."),
+                              Text(
+                                  "ادخل البيانات بدقه حتي تكتمل عملية التفعيل."),
                               Divider(),
-                              Text("** لن تظهر الرسالة مرة اخري اذا كانت البيانات صحيحة",style: TextStyle(color: Colors.grey,fontSize: 10),),
+                              Text(
+                                "** لن تظهر الرسالة مرة اخري اذا كانت البيانات صحيحة",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 10),
+                              ),
 
                               Container(
                                 width: MediaQuery.of(context).size.width * .7,
@@ -737,7 +760,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Padding(
                                 padding:
-                                const EdgeInsets.only(top: 4, bottom: 4),
+                                    const EdgeInsets.only(top: 4, bottom: 4),
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * .7,
                                   height: 85,
@@ -829,9 +852,14 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         });
   }
-  showAlertDialogReg({
-    BuildContext context, String userId, var roomName, var roomsCode,var UID}) {
-    bool loading = false ;
+
+  showAlertDialogReg(
+      {BuildContext context,
+      String userId,
+      var roomName,
+      var roomsCode,
+      var UID}) {
+    bool loading = false;
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -885,21 +913,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // set up the buttons
           Widget cancelButton = FlatButton(
-            child: Text("Cancel",style: TextStyle(color: mainColor),),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: mainColor),
+            ),
             onPressed: () {
               Navigator.pop(context);
               _btnController.reset();
             },
           );
           Widget continueButton = FlatButton(
-            child: Text("Continue",style: TextStyle(color: mainColor),),
+            child: Text(
+              "Continue",
+              style: TextStyle(color: mainColor),
+            ),
             onPressed: () async {
               if (!formKey.currentState.validate()) {
                 return;
               } else {
-setState(() {
-  loading=true;
-});
+                setState(() {
+                  loading = true;
+                });
                 Firestore.instance
                     .collection(studentYear)
                     .document(_mobile.text)
@@ -907,22 +941,16 @@ setState(() {
                   'FormuserName': _name.text,
                   'FormuserMail': _mail.text,
                   'FormuserMobile': _mobile.text,
-                  "studentYear":studentYear,
-
+                  "studentYear": studentYear,
                 }).then((data) {
-
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            HomePage()),
-                        (Route<dynamic> route) => false,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                    (Route<dynamic> route) => false,
                   );
-
                 });
 
                 _btnController.success();
-
               }
             },
           );
@@ -931,11 +959,16 @@ setState(() {
           return AlertDialog(
             actions: [
               cancelButton,
-              loading==false?continueButton:Container(color: Colors.red,height: 50,width: 50,),
+              loading == false
+                  ? continueButton
+                  : Container(
+                      color: Colors.red,
+                      height: 50,
+                      width: 50,
+                    ),
             ],
             content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-
                 return SizedBox(
                   height: 400,
                   child: Directionality(
@@ -976,9 +1009,10 @@ setState(() {
                                 ),
                                 Padding(
                                   padding:
-                                  const EdgeInsets.only(top: 4, bottom: 4),
+                                      const EdgeInsets.only(top: 4, bottom: 4),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width * .7,
+                                    width:
+                                        MediaQuery.of(context).size.width * .7,
                                     height: 85,
                                     child: TextFormField(
                                       keyboardType: TextInputType.emailAddress,
@@ -1019,27 +1053,41 @@ setState(() {
                                 ),
                                 DropdownButton(
                                   hint: _dropDownValue == null
-                                      ? Text('اختر الفرقة الدراسية',style: TextStyle(color:redColor),)
+                                      ? Text(
+                                          'اختر الفرقة الدراسية',
+                                          style: TextStyle(color: redColor),
+                                        )
                                       : Text(
-                                    _dropDownValue,
-                                    style: TextStyle(color: mainColor),
-                                  ),
+                                          _dropDownValue,
+                                          style: TextStyle(color: mainColor),
+                                        ),
                                   isExpanded: true,
                                   iconSize: 30.0,
                                   style: TextStyle(color: mainColor),
-                                  items: ['الأولي', 'الثانية', 'الثالثة',"الرابعة"].map(
-                                        (val) {
+                                  items: [
+                                    'الأولي',
+                                    'الثانية',
+                                    'الثالثة',
+                                    "الرابعة"
+                                  ].map(
+                                    (val) {
                                       return DropdownMenuItem<String>(
                                         value: val,
-                                        child: Text(val,textDirection: TextDirection.rtl,style: TextStyle(color: greyblackColor,fontWeight: FontWeight.bold),),
+                                        child: Text(
+                                          val,
+                                          textDirection: TextDirection.rtl,
+                                          style: TextStyle(
+                                              color: greyblackColor,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       );
                                     },
                                   ).toList(),
                                   onChanged: (val) {
                                     setState(
-                                          () {
+                                      () {
                                         _dropDownValue = val;
-                                        studentYear =val;
+                                        studentYear = val;
                                         print(studentYear);
                                       },
                                     );
