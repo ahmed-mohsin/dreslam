@@ -219,7 +219,7 @@ class AdminBoardBody extends StatelessWidget {
                       builder: (_) => StudentsData()));
             },
             child: Text(
-              "Students Data",
+              "2020Students Data",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -228,7 +228,32 @@ class AdminBoardBody extends StatelessWidget {
           ),
         ),
 
-      )],
+      ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              color: blueColor,
+              elevation: 10,
+              borderRadius: BorderRadiusDirectional.circular(10),
+              child: MaterialButton(
+                minWidth: MediaQuery.of(context).size.width * .75,
+                onPressed: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => Years("newData2021", "بيانات الطلبه الجدد")));
+                },
+                child: Text(
+                  "2021Students Data",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+
+          )],
       ),
     );
   }

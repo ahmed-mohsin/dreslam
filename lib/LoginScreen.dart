@@ -706,7 +706,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         //color: Colors.white,
                         elevation: 0,
                         child: Form(
-                          autovalidate: _autoValidate,
                           key: formKey,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -832,6 +831,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   showAlertDialogReg({
     BuildContext context, String userId, var roomName, var roomsCode,var UID}) {
+    bool loading = false ;
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -897,12 +897,13 @@ class _LoginScreenState extends State<LoginScreen> {
               if (!formKey.currentState.validate()) {
                 return;
               } else {
-
+setState(() {
+  loading=true;
+});
                 Firestore.instance
-                    .collection('UsersID2021')
+                    .collection(studentYear)
                     .document(_mobile.text)
                     .setData({
-
                   'FormuserName': _name.text,
                   'FormuserMail': _mail.text,
                   'FormuserMobile': _mobile.text,
@@ -930,7 +931,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return AlertDialog(
             actions: [
               cancelButton,
-              continueButton,
+              loading==false?continueButton:Container(color: Colors.red,height: 50,width: 50,),
             ],
             content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
@@ -1026,7 +1027,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isExpanded: true,
                                   iconSize: 30.0,
                                   style: TextStyle(color: mainColor),
-                                  items: ['الاولي', 'الثانية', 'الثالثة',"الرابعة"].map(
+                                  items: ['الأولي', 'الثانية', 'الثالثة',"الرابعة"].map(
                                         (val) {
                                       return DropdownMenuItem<String>(
                                         value: val,

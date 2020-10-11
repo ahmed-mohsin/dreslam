@@ -147,24 +147,168 @@ class SignInToSeeContent extends StatelessWidget {
       decoration: BoxDecoration(image: decorationImage("g3.jpg")),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-        "Sign in with activated Student account  \n  you must have at least one activated Material to see this section",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.bold, color: goldenColor),
-      ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: MaterialButton(color: Colors.black,child: Text("login",style: TextStyle(color: Colors.white),),onPressed: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
-                }),
-              )
-            ],
+      child: Container(
+          child: StreamBuilder(
+            stream: Firestore.instance
+                .collection("Rooms")
+                .document("*Visitors")
+                .collection("Videos")
+                .where('show', isEqualTo: "on")
+                .orderBy("createdAt", descending: true)
+                .snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) return HndleError(context);
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Loader();
+
+                default:
+                  return new ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (_, index) {
+                      if (snapshot.data.documents.length == 0) {
+                        return Text(
+                          "لا توجد مواد الآن",
+                          style: TextStyle(color: Colors.red),
+                        );
+                      } else {
+                        return Padding(
+                          padding:
+                          const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                          child: new Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: mainColor),
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Row(
+                                      children: <Widget>[
+
+                                        Container(
+                                          child: Expanded(
+                                            child: Text(
+                                              snapshot
+                                                  .data.documents[index]['title']
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  color: mainColor, fontSize: 18),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: mainColor,
+                                  ),
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(left: 30, right: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          snapshot.data.documents[index]['name'],
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        Text(
+                                          " تمت مشاهدته ${snapshot.data.documents[index]['views'].toString()} مرة ",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: mainColor,
+                                  ),
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(left: 30, right: 30),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                      children: <Widget>[
+                                        InkWell(onTap: (){
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => YoutubePlayerPage2(
+                                                      snapshot.data.documents[index]['code'])));
+
+                                          Firestore.instance
+                                              .collection("Rooms")
+                                              .document("*Visitors")
+                                              .collection("Videos")
+                                              .document(snapshot.data.documents[index]['id'])
+                                              .updateData({"views": FieldValue.increment(1)});
+                                        },
+                                          child: Row(
+                                            children: <Widget>[Icon(
+                                              Icons.play_circle_filled,
+                                              color: mainColor,
+                                            ),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                child: Text(
+                                                  "Player2",
+                                                  style: TextStyle(color: Colors.grey),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        InkWell(onTap: (){
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => YoutubePlayerPage(
+                                                      snapshot.data.documents[index]['code'])));
+
+                                          Firestore.instance
+                                              .collection("Rooms")
+                                              .document("*Visitors")
+                                              .collection("Videos")
+                                              .document(snapshot.data.documents[index]['id'])
+                                              .updateData({"views": FieldValue.increment(1)});
+                                        },
+                                          child: Row(
+                                            children: <Widget>[Icon(
+                                              Icons.play_circle_filled,
+                                              color: mainColor,
+                                            ),
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                child: Text(
+                                                  "Player1",
+                                                  style: TextStyle(color: Colors.grey),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  );
+              }
+            },
           )),
     );
   }
