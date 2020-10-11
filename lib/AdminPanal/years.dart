@@ -80,7 +80,11 @@ class _YearsBodyState extends State<YearsBody> {
         shrinkWrap: true,
         crossAxisCount: 2,
         children: <Widget>[
-          Padding(
+          yearItem("الأولي", "101", r101, r101val),
+          yearItem("الثانية", "102", r102, r102val),
+          yearItem("الثالثة", "103", r103, r103val),
+          yearItem("الرابعة", "104", r104, r104val),
+         widget.type=="videos"?Padding(
             padding: const EdgeInsets.all(8.0),
             child: Material(
               shadowColor: Colors.red[100],
@@ -105,11 +109,8 @@ class _YearsBodyState extends State<YearsBody> {
                 ),
               ),
             ),
-          ),
-          yearItem("الأولي", "101", r101, r101val),
-          yearItem("الثانية", "102", r102, r102val),
-          yearItem("الثالثة", "103", r103, r103val),
-          yearItem("الرابعة", "104", r104, r104val),
+          ):Container(),
+
         ],
       ),
     );
