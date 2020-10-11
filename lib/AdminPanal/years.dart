@@ -74,7 +74,6 @@ class YearsBody extends StatefulWidget {
 class _YearsBodyState extends State<YearsBody> {
   @override
   Widget build(BuildContext context) {
-    print(widget.type);
     return Container(
       height: MediaQuery.of(context).size.height,
       child: GridView.count(

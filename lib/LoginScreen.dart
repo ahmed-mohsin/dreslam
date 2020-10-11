@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'dart:io' show Platform;
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'AdminPanal/AdminBoard.dart';
 import 'Decorations.dart';
 import 'HomePage.dart';
@@ -31,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String studentYear;
   String loadingPhase;
   bool rememberMe;
+  bool showAlertDialogbool;
   final RoundedLoadingButtonController _btnController =
       new RoundedLoadingButtonController();
   final RoundedLoadingButtonController _btn2Controller =
@@ -47,7 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
-
+  getshowDialogAlert() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    showAlertDialogbool = prefs.getBool("showDialogAlert");
+    print("showwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww dialog =>>>>>>>>>>>>>>>>>>>>>>>.$showAlertDialogbool");
+  }
   getDeviceId() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
@@ -91,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
     getDeviceId();
     loadingPhase = " ";
     super.initState();
-
+    getshowDialogAlert();
     widget.cashedUserController != null
         ? userController =
             new TextEditingController(text: widget.cashedUserController)
@@ -522,9 +528,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               roomDataBox.put("roomsName", []);
                               roomDataBox.put("roomsCode", []);
 //
-//                               Navigator.pushReplacement(context,
-//                                   MaterialPageRoute(builder: (_) => HomePage()));
-                              showAlertDialogReg(context: context);
+
+                              showAlertDialogbool==false?Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (_) => HomePage())):showAlertDialogReg(context: context);
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * .40,
@@ -942,12 +948,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   'FormuserMail': _mail.text,
                   'FormuserMobile': _mobile.text,
                   "studentYear": studentYear,
-                }).then((data) {
+                }).then((data)async {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage()),
                     (Route<dynamic> route) => false,
                   );
+                  SharedPreferences myPrefs = await SharedPreferences.getInstance();
+                  myPrefs.setBool('showDialogAlert', false);
                 });
 
                 _btnController.success();
