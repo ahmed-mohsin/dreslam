@@ -33,7 +33,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -46,9 +46,9 @@ android {
     defaultConfig {
         applicationId "ahmedmohsin.com.dreslamelshahawy"
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 5
-        versionName "Dr Eslam Elshahawy App Vesrion 2.3"
+        targetSdkVersion 29
+        versionCode 7
+        versionName "Dr Eslam Elshahawy App Vesrion 2.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
