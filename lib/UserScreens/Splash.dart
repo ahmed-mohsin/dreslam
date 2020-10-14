@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dreslamelshahawy/AdminPanal/AdminBoard.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hive/hive.dart';
@@ -29,6 +30,14 @@ class _SplashState extends State<Splash> {
     });
 
     void _gotoLogin() async {
+      final RemoteConfig remoteConfig = await RemoteConfig.instance;
+      final defaults = <String, dynamic>{'welcome': 'default welcome'};
+      await remoteConfig.setDefaults(defaults);
+
+      await remoteConfig.fetch(expiration: const Duration(hours: 5));
+      await remoteConfig.activateFetched();
+      print('welcome message: ' + remoteConfig.getString('welcome'));
+
       Timer(Duration(seconds: 2), () {
         Navigator.pushAndRemoveUntil(
           context,
@@ -102,7 +111,7 @@ class _SplashState extends State<Splash> {
       resizeToAvoidBottomPadding: true,
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(image: decorationImage("bg.png")),
+          decoration: BoxDecoration(image: decorationImage("g3.jpg")),
           height: screenHeight,
           width: screenWidth,
           child: Center(
@@ -123,7 +132,7 @@ class _SplashState extends State<Splash> {
                     ),
                     checkHive == false
                         ? SpinKitCircle(
-                            color: redColor,
+                            color: goldenColor,
                             size: 70,
                           )
                         : Container()

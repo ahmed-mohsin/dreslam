@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
           resizeToAvoidBottomPadding: true,
           body: SingleChildScrollView(
             child: Container(
-              decoration: BoxDecoration(image: decorationImage("bg.png")),
+              decoration: BoxDecoration(image: decorationImage("g1.jpg")),
               height: screenHeight,
               width: screenWidth,
               child: Center(
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.all(60.0),
+                          padding: const EdgeInsets.all(50.0),
                           child: Container(
                             height: 200,
                             width: 200,
@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 3,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.only(top: 30),
                           child: RoundedLoadingButton(
                             width: 200,
                             color: redColor,
@@ -501,48 +501,54 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-//                        Padding(
-//                          padding: const EdgeInsets.only(bottom: 10),
-//                          child: Platform.isAndroid==true?Container():Text(
-//                            ", Register as A New User",
-//                            style: TextStyle(
-//                                color: goldenColor,
-//                                decoration: TextDecoration.underline),
-//                          ),
-//                        ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 120),
-                          child: RoundedLoadingButton(
-                            height: 47,
-                            width: 200,
-                            color: goldenColor,
-                            controller: _btn2Controller,
-                            onPressed: () async {
-                              final FirebaseAuth _auth = FirebaseAuth.instance;
-                              user = (await _auth.signInWithEmailAndPassword(
-                                email: "iphonevisitor@admin.com",
-                                password: "iphonevisitor",
-                              ))
-                                  .user;
-                              print(user.email);
-                              roomDataBox.put("roomsName", []);
-                              roomDataBox.put("roomsCode", []);
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Platform.isAndroid==true?Container():Text(
+                            ", Register as A New User",
+                            style: TextStyle(
+                                color: goldenColor,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 40),
+                          child: Column(
+                            children: [
+                              RoundedLoadingButton(
+                                height: 47,
+                                width: 200,
+                                color: goldenColor,
+                                controller: _btn2Controller,
+                                onPressed: () async {
+                                  final FirebaseAuth _auth = FirebaseAuth.instance;
+                                  user = (await _auth.signInWithEmailAndPassword(
+                                    email: "iphonevisitor@admin.com",
+                                    password: "iphonevisitor",
+                                  ))
+                                      .user;
+                                  print(user.email);
+                                  roomDataBox.put("roomsName", []);
+                                  roomDataBox.put("roomsCode", []);
 //
 
-                              showAlertDialogbool==false?Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (_) => HomePage())):showAlertDialogReg(context: context);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * .40,
-                              child: Text(
-                                "Or aVisitor",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
+                                  showAlertDialogbool==false?Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (_) => HomePage())):showAlertDialogReg(context: context);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * .40,
+                                  child: Text(
+                                    "Or aVisitor",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
+                                  ),
+                                ),
                               ),
-                            ),
+
+                            ],
                           ),
-                        )
+                        ),
+
                       ],
                     ),
                   ),
@@ -925,8 +931,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             onPressed: () {
               Navigator.pop(context);
-              _btnController.reset();
-            },
+              _btn2Controller.reset();            },
           );
           Widget continueButton = FlatButton(
             child: Text(
@@ -958,7 +963,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   myPrefs.setBool('showDialogAlert', false);
                 });
 
-                _btnController.success();
+                _btn2Controller.success();
               }
             },
           );
