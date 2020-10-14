@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(color: Colors.black87, ),
-        child: GNav(color: redColor,backgroundColor: Colors.black87,
+        child: GNav(color: goldenColor,backgroundColor: Colors.black87,
             gap: 8,
             activeColor: redColor,
             iconSize: 24,
