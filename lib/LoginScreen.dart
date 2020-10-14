@@ -931,8 +931,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             onPressed: () {
               Navigator.pop(context);
-              _btnController.reset();
-            },
+              _btn2Controller.reset();            },
           );
           Widget continueButton = FlatButton(
             child: Text(
@@ -964,7 +963,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   myPrefs.setBool('showDialogAlert', false);
                 });
 
-                _btnController.success();
+                _btn2Controller.success();
               }
             },
           );
