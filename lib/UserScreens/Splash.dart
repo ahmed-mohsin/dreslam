@@ -111,7 +111,7 @@ class _SplashState extends State<Splash> {
       resizeToAvoidBottomPadding: true,
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(image: decorationImage("bg.png")),
+          decoration: BoxDecoration(image: decorationImage("g3.jpg")),
           height: screenHeight,
           width: screenWidth,
           child: Center(
@@ -132,7 +132,7 @@ class _SplashState extends State<Splash> {
                     ),
                     checkHive == false
                         ? SpinKitCircle(
-                            color: redColor,
+                            color: goldenColor,
                             size: 70,
                           )
                         : Container()

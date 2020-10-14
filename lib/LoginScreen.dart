@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
           resizeToAvoidBottomPadding: true,
           body: SingleChildScrollView(
             child: Container(
-              decoration: BoxDecoration(image: decorationImage("bg.png")),
+              decoration: BoxDecoration(image: decorationImage("g1.jpg")),
               height: screenHeight,
               width: screenWidth,
               child: Center(
@@ -511,38 +511,44 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 120),
-                          child: RoundedLoadingButton(
-                            height: 47,
-                            width: 200,
-                            color: goldenColor,
-                            controller: _btn2Controller,
-                            onPressed: () async {
-                              final FirebaseAuth _auth = FirebaseAuth.instance;
-                              user = (await _auth.signInWithEmailAndPassword(
-                                email: "iphonevisitor@admin.com",
-                                password: "iphonevisitor",
-                              ))
-                                  .user;
-                              print(user.email);
-                              roomDataBox.put("roomsName", []);
-                              roomDataBox.put("roomsCode", []);
+                          padding: const EdgeInsets.only(bottom: 40),
+                          child: Column(
+                            children: [
+                              RoundedLoadingButton(
+                                height: 47,
+                                width: 200,
+                                color: goldenColor,
+                                controller: _btn2Controller,
+                                onPressed: () async {
+                                  final FirebaseAuth _auth = FirebaseAuth.instance;
+                                  user = (await _auth.signInWithEmailAndPassword(
+                                    email: "iphonevisitor@admin.com",
+                                    password: "iphonevisitor",
+                                  ))
+                                      .user;
+                                  print(user.email);
+                                  roomDataBox.put("roomsName", []);
+                                  roomDataBox.put("roomsCode", []);
 //
 
-                              showAlertDialogbool==false?Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (_) => HomePage())):showAlertDialogReg(context: context);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * .40,
-                              child: Text(
-                                "Or aVisitor",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
+                                  showAlertDialogbool==false?Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (_) => HomePage())):showAlertDialogReg(context: context);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * .40,
+                                  child: Text(
+                                    "Or aVisitor",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
+                                  ),
+                                ),
                               ),
-                            ),
+
+                            ],
                           ),
-                        )
+                        ),
+
                       ],
                     ),
                   ),
