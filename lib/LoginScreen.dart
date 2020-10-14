@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.all(60.0),
+                          padding: const EdgeInsets.all(50.0),
                           child: Container(
                             height: 200,
                             width: 200,
@@ -211,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 3,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.only(top: 30),
                           child: RoundedLoadingButton(
                             width: 200,
                             color: redColor,
@@ -502,7 +502,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 15),
                           child: Platform.isAndroid==true?Container():Text(
                             ", Register as A New User",
                             style: TextStyle(
