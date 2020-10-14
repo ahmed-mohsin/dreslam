@@ -501,17 +501,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
+
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: Platform.isAndroid==true?Container():Text(
-                            ", Register as A New User",
-                            style: TextStyle(
-                                color: goldenColor,
-                                decoration: TextDecoration.underline),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 40),
+                          padding: const EdgeInsets.only(bottom: 40,top: 6),
                           child: Column(
                             children: [
                               RoundedLoadingButton(
