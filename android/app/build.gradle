@@ -47,8 +47,8 @@ android {
         applicationId "ahmedmohsin.com.dreslamelshahawy"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 8
-        versionName "Dr Eslam Elshahawy App Vesrion 2.7"
+        versionCode 9
+        versionName "Dr Eslam Elshahawy App Vesrion 2.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
