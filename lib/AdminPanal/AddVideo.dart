@@ -42,8 +42,6 @@ class AdminAddVideo extends StatelessWidget {
           ),
           body: Container(
             decoration: BoxDecoration(image: decorationImage("bg2.png")),
-            width: screenWidth,
-            height: screenHeight,
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
@@ -83,8 +81,8 @@ class _AdminAddVideoBodyState extends State<AdminAddVideoBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
       child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemCount: widget.yearRooms.length,

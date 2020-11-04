@@ -1,7 +1,7 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dreslamelshahawy/player2.dart';
+import 'package:dreslamelshahawy/quiz/quiz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +33,6 @@ class _RoomsState extends State<Rooms> {
     roomDataBox.then((data) {
       setState(() {
         roomsName = data.get("roomsName");
-
       });
     });
   }
@@ -45,7 +44,7 @@ class _RoomsState extends State<Rooms> {
       builder: (BuildContext context) => new CupertinoAlertDialog(
         title: new Text(
           "الخروج من التطبيق",
-          style: TextStyle( fontFamily: 'arn',color: redColor),
+          style: TextStyle(fontFamily: 'arn', color: redColor),
         ),
         content: Padding(
           padding: const EdgeInsets.only(top: 4),
@@ -60,7 +59,7 @@ class _RoomsState extends State<Rooms> {
             isDefaultAction: true,
             child: new Text(
               "إلغاء ",
-              style: TextStyle(fontFamily: 'arn',color: redColor),
+              style: TextStyle(fontFamily: 'arn', color: redColor),
             ),
             onPressed: () async {
               Navigator.of(context).pop();
@@ -71,7 +70,7 @@ class _RoomsState extends State<Rooms> {
             isDefaultAction: false,
             child: new Text(
               "خروج",
-              style: TextStyle(fontFamily: 'arn',color: Colors.black),
+              style: TextStyle(fontFamily: 'arn', color: Colors.black),
             ),
             onPressed: () async {
               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -80,17 +79,16 @@ class _RoomsState extends State<Rooms> {
               });
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => LoginScreen()),
-                    (Route<dynamic> route) => false,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (Route<dynamic> route) => false,
               );
-
             },
           )
         ],
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -100,11 +98,17 @@ class _RoomsState extends State<Rooms> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-
           appBar: AppBar(
-            actions: <Widget>[IconButton(icon: Icon(LineIcons.sign_out,color: mainColor,), onPressed: (){
-              alert();
-            })],
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    LineIcons.sign_out,
+                    color: mainColor,
+                  ),
+                  onPressed: () {
+                    alert();
+                  })
+            ],
             iconTheme: new IconThemeData(color: greenColor),
             backgroundColor: Colors.black,
             centerTitle: true,
@@ -112,10 +116,9 @@ class _RoomsState extends State<Rooms> {
               "المواد",
               style: TextStyle(color: mainColor),
             ),
-        ),
+          ),
           resizeToAvoidBottomInset: true,
           resizeToAvoidBottomPadding: true,
-
           body: roomsName.length == 0
               ? SignInToSeeContent()
               : Container(
@@ -149,21 +152,58 @@ class SignInToSeeContent extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: Container(
           child: StreamBuilder(
-            stream: Firestore.instance
-                .collection("Rooms")
-                .document("*Visitors")
-                .collection("Videos")
-                .where('show', isEqualTo: "on")
-                .orderBy("createdAt", descending: true)
-                .snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) return HndleError(context);
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Loader();
+        stream: Firestore.instance
+            .collection("Rooms")
+            .document("*Visitors")
+            .collection("Videos")
+            .where('show', isEqualTo: "on")
+            .orderBy("createdAt", descending: true)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return HndleError(context);
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Loader();
 
-                default:
-                  return new ListView.builder(
+            default:
+              return Column(
+                children: [
+                  // MaterialButton(
+                  //     color: goldenColor,
+                  //     child: Text('click'),
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //           context, MaterialPageRoute(builder: (_) => Quiz()));
+                  //     }),
+                  // MaterialButton(
+                  //     color: goldenColor,
+                  //     child: Text('ADD QUIZ'),
+                  //     onPressed: () {
+                  //       Firestore.instance
+                  //           .document('/Quizes/1/test1/t1')
+                  //           .updateData({
+                  //         'QuestionsNumbers':FieldValue.increment(1),
+                  //         'question1':'what is ................?',
+                  //         'answers1':["a","b","c","d","e"],
+                  //         'rightAnswer1':'b',
+                  //         'question2':'what is ................?',
+                  //         'answers2':["a","b","c","d","e"],
+                  //         'rightAnswer2':'c',
+                  //         'question3':'what is ................?',
+                  //         'answers3':["a","b","c","d","e"],
+                  //         'rightAnswer3':'d',
+                  //         'question4':'what is ................?',
+                  //         'answers4':["a","b","c","d","e"],
+                  //         'rightAnswer4':'a',
+                  //         'question5':'what is ................?',
+                  //         'answers5':["a","b","c","d","e"],
+                  //         'rightAnswer5':'e',
+                  //         'question6':'what is ................?',
+                  //         'answers6':["a","b","c","d","e"],
+                  //         'rightAnswer6':'d',
+                  //       });
+                  //     }),
+                  new ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: snapshot.data.documents.length,
@@ -175,8 +215,8 @@ class SignInToSeeContent extends StatelessWidget {
                         );
                       } else {
                         return Padding(
-                          padding:
-                          const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                          padding: const EdgeInsets.only(
+                              bottom: 8, left: 8, right: 8),
                           child: new Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: mainColor),
@@ -192,15 +232,15 @@ class SignInToSeeContent extends StatelessWidget {
                                     padding: const EdgeInsets.all(4.0),
                                     child: Row(
                                       children: <Widget>[
-
                                         Container(
                                           child: Expanded(
                                             child: Text(
-                                              snapshot
-                                                  .data.documents[index]['title']
+                                              snapshot.data
+                                                  .documents[index]['title']
                                                   .toString(),
                                               style: TextStyle(
-                                                  color: mainColor, fontSize: 18),
+                                                  color: mainColor,
+                                                  fontSize: 18),
                                             ),
                                           ),
                                         ),
@@ -211,14 +251,15 @@ class SignInToSeeContent extends StatelessWidget {
                                     color: mainColor,
                                   ),
                                   Padding(
-                                    padding:
-                                    const EdgeInsets.only(left: 30, right: 30),
+                                    padding: const EdgeInsets.only(
+                                        left: 30, right: 30),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text(
-                                          snapshot.data.documents[index]['name'],
+                                          snapshot.data.documents[index]
+                                              ['name'],
                                           style: TextStyle(color: Colors.grey),
                                         ),
                                         Text(
@@ -232,65 +273,86 @@ class SignInToSeeContent extends StatelessWidget {
                                     color: mainColor,
                                   ),
                                   Padding(
-                                    padding:
-                                    const EdgeInsets.only(left: 30, right: 30),
+                                    padding: const EdgeInsets.only(
+                                        left: 30, right: 30),
                                     child: Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceAround,
                                       children: <Widget>[
-                                        InkWell(onTap: (){
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) => YoutubePlayerPage2(
-                                                      snapshot.data.documents[index]['code'])));
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        YoutubePlayerPage2(
+                                                            snapshot.data
+                                                                    .documents[
+                                                                index]['code'])));
 
-                                          Firestore.instance
-                                              .collection("Rooms")
-                                              .document("*Visitors")
-                                              .collection("Videos")
-                                              .document(snapshot.data.documents[index]['id'])
-                                              .updateData({"views": FieldValue.increment(1)});
-                                        },
+                                            Firestore.instance
+                                                .collection("Rooms")
+                                                .document("*Visitors")
+                                                .collection("Videos")
+                                                .document(snapshot.data
+                                                    .documents[index]['id'])
+                                                .updateData({
+                                              "views": FieldValue.increment(1)
+                                            });
+                                          },
                                           child: Row(
-                                            children: <Widget>[Icon(
-                                              Icons.play_circle_filled,
-                                              color: mainColor,
-                                            ),
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.play_circle_filled,
+                                                color: mainColor,
+                                              ),
                                               Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
                                                 child: Text(
                                                   "Player2",
-                                                  style: TextStyle(color: Colors.grey),
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        InkWell(onTap: (){
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) => YoutubePlayerPage(
-                                                      snapshot.data.documents[index]['code'])));
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        YoutubePlayerPage(snapshot
+                                                                .data.documents[
+                                                            index]['code'])));
 
-                                          Firestore.instance
-                                              .collection("Rooms")
-                                              .document("*Visitors")
-                                              .collection("Videos")
-                                              .document(snapshot.data.documents[index]['id'])
-                                              .updateData({"views": FieldValue.increment(1)});
-                                        },
+                                            Firestore.instance
+                                                .collection("Rooms")
+                                                .document("*Visitors")
+                                                .collection("Videos")
+                                                .document(snapshot.data
+                                                    .documents[index]['id'])
+                                                .updateData({
+                                              "views": FieldValue.increment(1)
+                                            });
+                                          },
                                           child: Row(
-                                            children: <Widget>[Icon(
-                                              Icons.play_circle_filled,
-                                              color: mainColor,
-                                            ),
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.play_circle_filled,
+                                                color: mainColor,
+                                              ),
                                               Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
                                                 child: Text(
                                                   "Player1",
-                                                  style: TextStyle(color: Colors.grey),
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
                                                 ),
                                               ),
                                             ],
@@ -306,10 +368,12 @@ class SignInToSeeContent extends StatelessWidget {
                         );
                       }
                     },
-                  );
-              }
-            },
-          )),
+                  ),
+                ],
+              );
+          }
+        },
+      )),
     );
   }
 }
@@ -325,7 +389,7 @@ class _RoomslistState extends State<Roomslist> {
   String userName;
   String UID;
   bool saved;
-  bool showAlert ;
+  bool showAlert;
 
   @override
   void initState() {
@@ -337,7 +401,7 @@ class _RoomslistState extends State<Roomslist> {
         userName = data.get("userName");
         roomsCode = data.get("roomsCode");
         UID = data.get("UID");
-        showAlert=data.get("showalert");
+        showAlert = data.get("showalert");
         print("show alert == $showAlert");
       });
       print(data.get("userName"));
@@ -373,14 +437,12 @@ class _RoomslistState extends State<Roomslist> {
 //                          roomsCode[index].toString()),
 //                    ));
 
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RoomContent(roomsName[index].toString(),
-                            roomsCode[index].toString()),
-                      ));
-
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RoomContent(roomsName[index].toString(),
+                          roomsCode[index].toString()),
+                    ));
 
 //                DocumentReference getRoomVideoCode = Firestore.instance
 //                    .collection('AdminPanal.Rooms')
@@ -401,7 +463,7 @@ class _RoomslistState extends State<Roomslist> {
               child: Container(
                 child: new Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color:mainColor),
+                      border: Border.all(color: mainColor),
                       borderRadius: BorderRadius.circular(7),
                       color: Colors.transparent),
                   child: Padding(
@@ -423,8 +485,10 @@ class _RoomslistState extends State<Roomslist> {
                               ),
                               Text(
                                 roomsName[index].toString(),
-                                style:
-                                    TextStyle(color: mainColor, fontSize: 18,fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: mainColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -448,7 +512,6 @@ class _RoomslistState extends State<Roomslist> {
       },
     );
   }
-
 }
 
 class RoomContent extends StatelessWidget {

@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(color: Colors.black87, ),
         child: GNav(color: goldenColor,backgroundColor: Colors.black87,
             gap: 8,
-            activeColor: redColor,
+            activeColor: Colors.lime,
             iconSize: 24,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
             duration: Duration(milliseconds: 800),

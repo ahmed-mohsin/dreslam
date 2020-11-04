@@ -523,8 +523,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   roomDataBox.put("roomsCode", []);
 //
 
-                                  showAlertDialogbool==false?Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (_) => HomePage())):showAlertDialogReg(context: context);
+                                  //showAlertDialogbool==false?
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (_) => HomePage()));
+                                  //:showAlertDialogReg(context: context);
                                 },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * .40,
