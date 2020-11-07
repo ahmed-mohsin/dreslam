@@ -262,12 +262,12 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                           children: <Widget>[
                             InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => YoutubePlayerPage(
-                                            snapshot.data.documents[index]
-                                                ['code'])));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (_) => YoutubePlayerPage(
+                                //             snapshot.data.documents[index]
+                                //                 ['code'])));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),

@@ -263,16 +263,16 @@ class AdminRoomContentBookStreamBuilder extends StatelessWidget {
                           children: <Widget>[
                             InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => PdfReader(
-                                            snapshot
-                                                .data.documents[index]['title']
-                                                .toString(),
-                                            snapshot
-                                                .data.documents[index]['code']
-                                                .toString())));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (_) => PdfReader(
+                                //             snapshot
+                                //                 .data.documents[index]['title']
+                                //                 .toString(),
+                                //             snapshot
+                                //                 .data.documents[index]['code']
+                                //                 .toString())));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),

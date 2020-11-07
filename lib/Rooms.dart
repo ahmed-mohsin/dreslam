@@ -321,23 +321,23 @@ class SignInToSeeContent extends StatelessWidget {
                                         ),
                                         InkWell(
                                           onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        YoutubePlayerPage(snapshot
-                                                                .data.documents[
-                                                            index]['code'])));
-
-                                            Firestore.instance
-                                                .collection("Rooms")
-                                                .document("*Visitors")
-                                                .collection("Videos")
-                                                .document(snapshot.data
-                                                    .documents[index]['id'])
-                                                .updateData({
-                                              "views": FieldValue.increment(1)
-                                            });
+                                            // Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //         builder: (_) =>
+                                            //             YoutubePlayerPage(snapshot
+                                            //                     .data.documents[
+                                            //                 index]['code'])));
+                                            //
+                                            // Firestore.instance
+                                            //     .collection("Rooms")
+                                            //     .document("*Visitors")
+                                            //     .collection("Videos")
+                                            //     .document(snapshot.data
+                                            //         .documents[index]['id'])
+                                            //     .updateData({
+                                            //   "views": FieldValue.increment(1)
+                                            // });
                                           },
                                           child: Row(
                                             children: <Widget>[
@@ -563,11 +563,11 @@ class RoomContent extends StatelessWidget {
                       child: item("الفيديوهات", Icons.ondemand_video)),
                   InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    RoomContentBooks(title, roomCode)));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (_) =>
+                        //             RoomContentBooks(title, roomCode)));
                       },
                       child: item("المذكرات و الكتب", Icons.local_library)),
                   InkWell(
