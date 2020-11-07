@@ -281,14 +281,14 @@ class SignInToSeeContent extends StatelessWidget {
                                       children: <Widget>[
                                         InkWell(
                                           onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        YoutubePlayerPage2(
-                                                            snapshot.data
-                                                                    .documents[
-                                                                index]['code'])));
+                                            // Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //         builder: (_) =>
+                                            //             YoutubePlayerPage2(
+                                            //                 snapshot.data
+                                            //                         .documents[
+                                            //                     index]['code'])));
 
                                             Firestore.instance
                                                 .collection("Rooms")
@@ -643,11 +643,11 @@ class AdminRoom extends StatelessWidget {
                         const EdgeInsets.only(bottom: 8, left: 8, right: 8),
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => YoutubePlayerPage2(
-                                    snapshot.data.documents[index]['code'])));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (_) => YoutubePlayerPage2(
+                        //             snapshot.data.documents[index]['code'])));
                       },
                       child: new Container(
                         decoration: BoxDecoration(

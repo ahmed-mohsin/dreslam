@@ -173,11 +173,11 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                                     MainAxisAlignment.spaceAround,
                                     children: <Widget>[
                                       InkWell(onTap: (){
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (_) => YoutubePlayerPage2(
-                                                    snapshot.data.documents[index]['code'])));
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (_) => YoutubePlayerPage2(
+                                        //             snapshot.data.documents[index]['code'])));
 
                                         Firestore.instance
                                             .collection("Rooms")

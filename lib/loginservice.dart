@@ -47,10 +47,10 @@ void signInWithEmailAndPassword(
     ref.get().then((data) {
       if (data.exists) {
         String code = data.data['code'];
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (_) => YoutubePlayerPage2("ivioby1mcYI")));
+        // Navigator.pushReplacement(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (_) => YoutubePlayerPage2("ivioby1mcYI")));
       }
     });
     // Navigate to main page
