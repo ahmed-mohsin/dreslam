@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dreslamelshahawy/player2.dart';
 import 'package:dreslamelshahawy/quiz/quiz.dart';
@@ -578,6 +579,12 @@ class RoomContent extends StatelessWidget {
                                 builder: (_) => StudentAsk(title, roomCode)));
                       },
                       child: item("اسأل سؤال عن المادة", Icons.ondemand_video)),
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ExamsArena()));
+                      },
+                      child: item("Exams", Icons.ondemand_video)),
 //                  item("الاسئلة و الامتحانات السابقة", Icons.lock_open)
                 ],
               ),
@@ -707,5 +714,154 @@ class AdminRoom extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class ExamsArena extends StatefulWidget {
+  @override
+  _ExamsArenaState createState() => _ExamsArenaState();
+}
+
+class _ExamsArenaState extends State<ExamsArena> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: data == null
+          ? Loader()
+          : Directionality(
+              textDirection: TextDirection.rtl,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 71),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: data['questions'],
+                        itemBuilder: (cx, i) {
+                          bool chck;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(data['question${i + 1}']),
+                              CustomRadioButton(
+                                autoWidth: true,
+                                selectedBorderColor: Colors.green,
+                                horizontal: true,
+                                unSelectedColor: Theme.of(context).canvasColor,
+                                buttonLables: [
+                                  data['answers1'][0],
+                                  data['answers1'][1],
+                                  data['answers1'][2],
+                                  data['answers1'][3],
+                                ],
+                                buttonValues: [
+                                  data['answers1'][0],
+                                  data['answers1'][1],
+                                  data['answers1'][2],
+                                  data['answers1'][3],
+                                ],
+                                //defaultSelected: "PARENT",
+                                radioButtonValue: (value) {
+                                  if (value == data['rightAnswer${i + 1}']) {
+                                    rightChoices.add(i);
+                                    distinctIds = rightChoices.toSet().toList();
+                                    print(distinctIds);
+                                    setState(() {
+                                      chck = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      chck = false;
+                                    });
+                                    distinctIds.remove(i);
+                                    print(distinctIds);
+                                  }
+                                },
+                                selectedColor: Theme.of(context).accentColor,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.assignment_turned_in,
+                                    color: Colors.amber,
+                                  ),
+                                  chck == true
+                                      ? Icon(
+                                          Icons.assignment_turned_in,
+                                          color: Colors.amber,
+                                        )
+                                      : Container(),
+                                  chck == false
+                                      ? Icon(
+                                          Icons.backspace,
+                                          color: Colors.red,
+                                        )
+                                      : Container()
+                                ],
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        child: InkWell(onTap: (){
+                          print(distinctIds.length/qn*100);
+                        },
+                          child: Container(
+                            height: 70,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.amber,
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+    );
+  }
+
+  List<int> distinctIds;
+
+  @override
+  void initState() {
+    getData();
+    rightChoices = [];
+  }
+
+  List<int> rightChoices;
+
+  Widget _myRadioButton({String title, int value, Function onChanged}) {
+    return RadioListTile(
+      value: value,
+      groupValue: _groupValue,
+      onChanged: onChanged,
+      title: Text(title),
+    );
+  }
+
+  dynamic data;
+  int _groupValue = -1;
+  int qn;
+  Future<dynamic> getData() async {
+    ///Test/test2
+    final DocumentReference document =
+        Firestore.instance.collection("Test").document('test2');
+
+    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+      print(data);
+      setState(() {
+        data = snapshot.data;
+        qn = data['questions'];
+        print(qn);
+        print(data);
+      });
+    });
   }
 }
