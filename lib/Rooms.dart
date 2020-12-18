@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dreslamelshahawy/player2.dart';
 import 'package:dreslamelshahawy/quiz/quiz.dart';
@@ -18,6 +17,7 @@ import 'RoomsContent/RoomContentVideos.dart';
 import 'RoomsContent/RoomsContentBooks.dart';
 import 'RoomsContent/StudentAsk.dart';
 import 'colors.dart';
+import 'lib/custom_radio_grouped_button.dart';
 
 class Rooms extends StatefulWidget {
   @override
@@ -726,6 +726,7 @@ class _ExamsArenaState extends State<ExamsArena> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(backgroundColor: Colors.black,),
       body: data == null
           ? Loader()
           : Directionality(
@@ -733,7 +734,7 @@ class _ExamsArenaState extends State<ExamsArena> {
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                decoration: BoxDecoration(image: decorationImage("g3.jpg")),
                 child: Stack(
                   children: [
                     Padding(
@@ -747,12 +748,19 @@ class _ExamsArenaState extends State<ExamsArena> {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(data['question${i + 1}']),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  data['question${i + 1}'],
+                                  style: TextStyle(
+                                      fontSize: 23, color:goldenColor),
+                                ),
+                              ),
                               CustomRadioButton(
                                 autoWidth: true,
-                                selectedBorderColor: Colors.green,
+                                selectedBorderColor: Colors.black,
                                 horizontal: true,
-                                unSelectedColor: Theme.of(context).canvasColor,
+                                unSelectedColor: Colors.white,
                                 buttonLables: [
                                   data['answers1'][0],
                                   data['answers1'][1],
@@ -779,31 +787,31 @@ class _ExamsArenaState extends State<ExamsArena> {
                                       chck = false;
                                     });
                                     distinctIds.remove(i);
-                                    print(distinctIds);
+                                    print(distinctIds.contains(i));
                                   }
                                 },
-                                selectedColor: Theme.of(context).accentColor,
+                                selectedColor: goldenColor,
                               ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.assignment_turned_in,
-                                    color: Colors.amber,
-                                  ),
-                                  chck == true
-                                      ? Icon(
-                                          Icons.assignment_turned_in,
-                                          color: Colors.amber,
-                                        )
-                                      : Container(),
-                                  chck == false
-                                      ? Icon(
-                                          Icons.backspace,
-                                          color: Colors.red,
-                                        )
-                                      : Container()
-                                ],
-                              )
+                              // Row(
+                              //   children: [
+                              //     Icon(
+                              //       Icons.assignment_turned_in,
+                              //       color: Colors.amber,
+                              //     ),
+                              //     chck == true
+                              //         ? Icon(
+                              //             Icons.assignment_turned_in,
+                              //             color: Colors.amber,
+                              //           )
+                              //         : Container(),
+                              //     chck == false
+                              //         ? Icon(
+                              //             Icons.backspace,
+                              //             color: Colors.red,
+                              //           )
+                              //         : Container()
+                              //   ],
+                              // )
                             ],
                           );
                         },
@@ -811,13 +819,30 @@ class _ExamsArenaState extends State<ExamsArena> {
                     ),
                     Positioned(
                         bottom: 0,
-                        child: InkWell(onTap: (){
-                          print(distinctIds.length/qn*100);
-                        },
-                          child: Container(
+                        child: InkWell(
+                          onTap: () {
+                            ///Test/test2/UsersResults/12012020
+                            ///
+                            ///
+
+                            //getExamResultForUser();
+                            print(distinctIds.length / qn * 100);
+                            if(distinctIds.length / qn * 100>70){
+                              print('user success');
+                              Firestore.instance
+                                  .collection("Test")
+                                  .document("test2")
+                                  .collection("UsersResults")
+                                  .document('12012020')
+                                  .setData({"pass": true,'result':distinctIds.length / qn * 100});
+                            }else{
+                              print('محتاج تزاكر تاني');
+                            }
+                          },
+                          child: Container(decoration:BoxDecoration(color: Colors.black,border: Border.all(color: goldenColor)),child: Center(child: Text("Finish",style: TextStyle(color: goldenColor),)),
                             height: 70,
                             width: MediaQuery.of(context).size.width,
-                            color: Colors.amber,
+
                           ),
                         ))
                   ],
@@ -833,6 +858,7 @@ class _ExamsArenaState extends State<ExamsArena> {
   void initState() {
     getData();
     rightChoices = [];
+    distinctIds = [];
   }
 
   List<int> rightChoices;
@@ -849,6 +875,7 @@ class _ExamsArenaState extends State<ExamsArena> {
   dynamic data;
   int _groupValue = -1;
   int qn;
+
   Future<dynamic> getData() async {
     ///Test/test2
     final DocumentReference document =
