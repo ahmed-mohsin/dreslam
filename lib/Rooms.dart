@@ -579,12 +579,12 @@ class RoomContent extends StatelessWidget {
                                 builder: (_) => StudentAsk(title, roomCode)));
                       },
                       child: item("اسأل سؤال عن المادة", Icons.ondemand_video)),
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => ExamsArena()));
-                      },
-                      child: item("Exams", Icons.ondemand_video)),
+                  // InkWell(
+                  //     onTap: () {
+                  //       Navigator.push(context,
+                  //           MaterialPageRoute(builder: (_) => ExamsArena()));
+                  //     },
+                  //     child: item("Exams", Icons.ondemand_video)),
 //                  item("الاسئلة و الامتحانات السابقة", Icons.lock_open)
                 ],
               ),
@@ -751,7 +751,7 @@ class _ExamsArenaState extends State<ExamsArena> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  data['question${i + 1}'],
+                                  '${i + 1}.${data['question${i + 1}']}',
                                   style: TextStyle(
                                       fontSize: 23, color:goldenColor),
                                 ),
@@ -792,26 +792,7 @@ class _ExamsArenaState extends State<ExamsArena> {
                                 },
                                 selectedColor: goldenColor,
                               ),
-                              // Row(
-                              //   children: [
-                              //     Icon(
-                              //       Icons.assignment_turned_in,
-                              //       color: Colors.amber,
-                              //     ),
-                              //     chck == true
-                              //         ? Icon(
-                              //             Icons.assignment_turned_in,
-                              //             color: Colors.amber,
-                              //           )
-                              //         : Container(),
-                              //     chck == false
-                              //         ? Icon(
-                              //             Icons.backspace,
-                              //             color: Colors.red,
-                              //           )
-                              //         : Container()
-                              //   ],
-                              // )
+
                             ],
                           );
                         },
@@ -821,25 +802,9 @@ class _ExamsArenaState extends State<ExamsArena> {
                         bottom: 0,
                         child: InkWell(
                           onTap: () {
-                            ///Test/test2/UsersResults/12012020
-                            ///
-                            ///
-
-                            //getExamResultForUser();
-                            print(distinctIds.length / qn * 100);
-                            if(distinctIds.length / qn * 100>70){
-                              print('user success');
-                              Firestore.instance
-                                  .collection("Test")
-                                  .document("test2")
-                                  .collection("UsersResults")
-                                  .document('12012020')
-                                  .setData({"pass": true,'result':distinctIds.length / qn * 100});
-                            }else{
-                              print('محتاج تزاكر تاني');
-                            }
+                            finishAlert();
                           },
-                          child: Container(decoration:BoxDecoration(color: Colors.black,border: Border.all(color: goldenColor)),child: Center(child: Text("Finish",style: TextStyle(color: goldenColor),)),
+                          child: Container(decoration:BoxDecoration(color: Colors.black26,border: Border.all(color: Colors.black26.withAlpha(10))),child: Center(child: Text("Finish",style: TextStyle(color: redColor),)),
                             height: 70,
                             width: MediaQuery.of(context).size.width,
 
@@ -853,7 +818,7 @@ class _ExamsArenaState extends State<ExamsArena> {
   }
 
   List<int> distinctIds;
-
+int minimumRQ;
   @override
   void initState() {
     getData();
@@ -875,6 +840,61 @@ class _ExamsArenaState extends State<ExamsArena> {
   dynamic data;
   int _groupValue = -1;
   int qn;
+  Future<bool> finishAlert() {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => new CupertinoAlertDialog(
+        title: new Text(
+          "انهاء",
+          style: TextStyle(fontFamily: 'arn', color: redColor),
+        ),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: new Text("هل تريد بالتأكيد انهاء الاختبار ؟",
+              style: TextStyle(
+                  color: Colors.black,
+                  //fontWeight: FontWeight.bold,
+                  fontFamily: 'arn')),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: new Text(
+              "لا",
+              style: TextStyle(fontFamily: 'arn', color: redColor),
+            ),
+            onPressed: () async {
+              Navigator.of(context).pop();
+            },
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            isDefaultAction: false,
+            child: new Text(
+              "نعم",
+              style: TextStyle(fontFamily: 'arn', color: Colors.black),
+            ),
+            onPressed: () async {
+              //getExamResultForUser();
+              print("right quistion numbers >>>>>> ${distinctIds.length} ");
+              if(distinctIds.length >= minimumRQ){
+                print('user success');
+                Firestore.instance
+                    .collection("Test")
+                    .document("test2")
+                    .collection("UsersResults")
+                    .document('12012020')
+                    .setData({"pass": true,'result':distinctIds.length});
+              }else{
+                print('محتاج تزاكر تاني');
+              }
+            },
+          )
+        ],
+      ),
+    );
+  }
 
   Future<dynamic> getData() async {
     ///Test/test2
@@ -886,6 +906,8 @@ class _ExamsArenaState extends State<ExamsArena> {
       setState(() {
         data = snapshot.data;
         qn = data['questions'];
+        minimumRQ = data['minimumRQ'];
+        print('minmumum right quistions >>>>>>>> $minimumRQ');
         print(qn);
         print(data);
       });

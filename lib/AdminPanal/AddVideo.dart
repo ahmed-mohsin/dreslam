@@ -280,13 +280,28 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                        snapshot.data.documents[index]['title']
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
+                                    Text(
+                                      snapshot.data.documents[index]['title']
+                                          .toString(),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Column(
+                                      children: <Widget>[
+                                        Text("عدد المشاهدات",style: TextStyle(color: Colors.white),),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue,shape: BoxShape.circle,
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(snapshot
+                                                .data.documents[index]['views']
+                                                .toString(),style: TextStyle(color: Colors.white),),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -306,9 +321,48 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
                             Divider(
                               color: Colors.white,
                             ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.only(left: 30, right: 30),
+                              child: Text(
+                                snapshot.data.documents[index]['needExam']==true?"محاضرة تحتاج امتحان":"محاضرة لا تحتاج امتحان",
+                                style: TextStyle(color: Colors.white30),
+                              ),
+                            ),
+                            Divider(
+                              color: Colors.white,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
+                                MaterialButton(
+                                    color: Colors.black,
+                                    onPressed: () {
+                                      if (snapshot.data.documents[index]['needExam']
+                                          == true) {
+                                        Firestore.instance
+                                            .collection("Rooms")
+                                            .document("*$roomCode")
+                                            .collection("Videos")
+                                            .document(snapshot
+                                            .data.documents[index]['id']
+                                            .toString())
+                                          ..updateData({"needExam": false});
+                                      } else {
+                                        Firestore.instance
+                                            .collection("Rooms")
+                                            .document("*$roomCode")
+                                            .collection("Videos")
+                                            .document(snapshot
+                                            .data.documents[index]['id']
+                                            .toString())
+                                          ..updateData({"needExam": true});
+                                      }
+                                    },
+                                    child: Text(
+                                      "Need Exam",
+                                      style: TextStyle(color: Colors.white),
+                                    )),
                                 MaterialButton(
                                     color: Colors.black,
                                     onPressed: () {
@@ -343,22 +397,7 @@ class AdminRoomContentVideoStreamBuilder extends StatelessWidget {
 //                                    onPressed: () {},
 //                                    child: Text("Edit",
 //                                        style: TextStyle(color: Colors.white))),
-                                Column(
-                                  children: <Widget>[
-                                    Text("عدد المشاهدات",style: TextStyle(color: Colors.white),),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.blue,shape: BoxShape.circle,
-                                          ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(snapshot
-                                            .data.documents[index]['views']
-                                            .toString(),style: TextStyle(color: Colors.white),),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+
                                 MaterialButton(
                                     color: Colors.black,
                                     hoverColor: Colors.black87,
@@ -404,6 +443,7 @@ class _addNewVideoState extends State<addNewVideo> {
   final code = TextEditingController();
   final title = TextEditingController();
   final name = TextEditingController();
+  final ExamCode = TextEditingController();
 
   final RoundedLoadingButtonController btnController =
       new RoundedLoadingButtonController();
@@ -491,6 +531,30 @@ class _addNewVideoState extends State<addNewVideo> {
                 ),
               ),
               Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  child: Container(
+                    child: TextFormField(
+                      controller: ExamCode,
+                      //keyboardType: TextInputType.number,
+                      maxLines: 1,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return ' *ادخل كود الامتحان';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          errorStyle: TextStyle(
+                              color: Colors.red, fontWeight: FontWeight.w600),
+                          labelText: "ادخل كود الامتحان",
+                          labelStyle: TextStyle(color: greenColor)),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(40),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
@@ -516,6 +580,8 @@ class _addNewVideoState extends State<addNewVideo> {
                         'views': 0,
                         'id': documentReference.documentID,
                         "createdAt": FieldValue.serverTimestamp(),
+                        'ExamCode': ExamCode.text,
+                        'needExam': false,
                       }).then((data) {
                         btnController.success();
                       });

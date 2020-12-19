@@ -173,11 +173,20 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                                 children: <Widget>[
                                   InkWell(
                                     onTap: () {
-                                      getExamResultForUser(
-                                          context,
-                                          snapshot.data.documents[index]
-                                          ['code'],
-                                          snapshot.data.documents[index]['id']);
+                                      //needExam
+                                      print('neeeed exam >>>> ${snapshot.data.documents[index]['needExam']}');
+                                      if(snapshot.data.documents[index]['needExam']==true){
+                                        getExamResultForUser(
+                                            context,
+                                            snapshot.data.documents[index]
+                                            ['code'],
+                                            snapshot.data.documents[index]['id'],snapshot.data.documents[index]['ExamCode']);
+                                      }else{
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) => YoutubePlayerPage(snapshot.data.documents[index]
+                                            ['code'])));
+                                      }
+
                                     },
                                     child: Row(
                                       children: <Widget>[
@@ -199,11 +208,18 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      getExamResultForUser(
-                                          context,
-                                          snapshot.data.documents[index]
-                                              ['code'],
-                                          snapshot.data.documents[index]['id']);
+                                      print('neeeed exam >>>> ${snapshot.data.documents[index]['needExam']}');
+                                      if(snapshot.data.documents[index]['needExam']==true){
+                                        getExamResultForUser(
+                                            context,
+                                            snapshot.data.documents[index]
+                                            ['code'],
+                                            snapshot.data.documents[index]['id'],snapshot.data.documents[index]['ExamCode']);
+                                      }else{
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (_) => YoutubePlayerPage(snapshot.data.documents[index]
+                                            ['code'])));
+                                      }
                                     },
                                     child: Row(
                                       children: <Widget>[
@@ -239,11 +255,11 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
     ));
   }
 
-  Future<dynamic> getExamResultForUser(context, code, id) async {
+  Future<dynamic> getExamResultForUser(context, videoCode, id,ExamCode) async {
     ///Test/test2
     final DocumentReference document = Firestore.instance
         .collection("Test")
-        .document('test2')
+        .document(ExamCode)
         .collection('UsersResults')
         .document('12012020');
 
@@ -254,7 +270,7 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
         if (pass == true) {
           print("user pass the exam");
           Navigator.push(context,
-              MaterialPageRoute(builder: (_) => YoutubePlayerPage(code)));
+              MaterialPageRoute(builder: (_) => YoutubePlayerPage(videoCode)));
 
           Firestore.instance
               .collection("Rooms")
