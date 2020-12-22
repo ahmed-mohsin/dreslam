@@ -718,6 +718,10 @@ class AdminRoom extends StatelessWidget {
 }
 
 class ExamsArena extends StatefulWidget {
+  String ExamCode ;
+
+  ExamsArena(this.ExamCode);
+
   @override
   _ExamsArenaState createState() => _ExamsArenaState();
 }
@@ -819,11 +823,20 @@ class _ExamsArenaState extends State<ExamsArena> {
 
   List<int> distinctIds;
 int minimumRQ;
+  final roomDataBox = Hive.openBox("roomsData");
+  String uid;
+
   @override
   void initState() {
-    getData();
+    getData(widget.ExamCode);
     rightChoices = [];
     distinctIds = [];
+    roomDataBox.then((value) {
+      uid = value.get('cashedUserController').toString().substring(
+          0, value.get('cashedUserController').toString().indexOf('@'));
+      print(value.get('cashedUserController').toString().substring(
+          0, value.get('cashedUserController').toString().indexOf('@')));
+    });
   }
 
   List<int> rightChoices;
@@ -880,13 +893,17 @@ int minimumRQ;
               print("right quistion numbers >>>>>> ${distinctIds.length} ");
               if(distinctIds.length >= minimumRQ){
                 print('user success');
+
                 Firestore.instance
                     .collection("Test")
-                    .document("test2")
+                    .document(widget.ExamCode)
                     .collection("UsersResults")
-                    .document('12012020')
+                    .document(uid)
                     .setData({"pass": true,'result':distinctIds.length});
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
               }else{
+                Navigator.of(context).pop();
                 print('محتاج تزاكر تاني');
               }
             },
@@ -896,10 +913,10 @@ int minimumRQ;
     );
   }
 
-  Future<dynamic> getData() async {
+  Future<dynamic> getData(code) async {
     ///Test/test2
     final DocumentReference document =
-        Firestore.instance.collection("Test").document('test2');
+        Firestore.instance.collection("Test").document(code);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       print(data);

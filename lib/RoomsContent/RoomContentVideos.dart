@@ -75,10 +75,30 @@ class RoomContentVideo extends StatelessWidget {
   }
 }
 
-class RoomContentVideoStreamBuilder extends StatelessWidget {
+class RoomContentVideoStreamBuilder extends StatefulWidget {
   String roomCode;
 
   RoomContentVideoStreamBuilder(this.roomCode);
+
+  @override
+  _RoomContentVideoStreamBuilderState createState() => _RoomContentVideoStreamBuilderState();
+}
+
+class _RoomContentVideoStreamBuilderState extends State<RoomContentVideoStreamBuilder> {
+  final roomDataBox = Hive.openBox("roomsData");
+  String uid;
+
+  @override
+  void initState() {
+    roomDataBox.then((value) {
+      uid = value.get('cashedUserController').toString().substring(
+          0, value.get('cashedUserController').toString().indexOf('@'));
+      print(value.get('cashedUserController').toString().substring(
+          0, value.get('cashedUserController').toString().indexOf('@')));
+
+    });
+    print(uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +106,7 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
         child: StreamBuilder(
       stream: Firestore.instance
           .collection("Rooms")
-          .document("*$roomCode")
+          .document("*${widget.roomCode}")
           .collection("Videos")
           .where('show', isEqualTo: "on")
           .orderBy("createdAt", descending: true)
@@ -174,19 +194,30 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                                   InkWell(
                                     onTap: () {
                                       //needExam
-                                      print('neeeed exam >>>> ${snapshot.data.documents[index]['needExam']}');
-                                      if(snapshot.data.documents[index]['needExam']==true){
+                                      print(
+                                          'neeeed exam >>>> ${snapshot.data.documents[index]['needExam']}');
+                                      if (snapshot.data.documents[index]
+                                              ['needExam'] ==
+                                          true) {
                                         getExamResultForUser(
                                             context,
                                             snapshot.data.documents[index]
-                                            ['code'],
-                                            snapshot.data.documents[index]['id'],snapshot.data.documents[index]['ExamCode']);
-                                      }else{
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (_) => YoutubePlayerPage(snapshot.data.documents[index]
-                                            ['code'])));
+                                                ['code'],
+                                            snapshot.data.documents[index]
+                                                ['id'],
+                                            //ExamCode
+                                            snapshot.data.documents[index]
+                                                ['ExamCode']);
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    YoutubePlayerPage(snapshot
+                                                            .data
+                                                            .documents[index]
+                                                        ['code'])));
                                       }
-
                                     },
                                     child: Row(
                                       children: <Widget>[
@@ -208,17 +239,28 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      print('neeeed exam >>>> ${snapshot.data.documents[index]['needExam']}');
-                                      if(snapshot.data.documents[index]['needExam']==true){
+                                      print(
+                                          'neeeed exam >>>> ${snapshot.data.documents[index]['needExam']}');
+                                      if (snapshot.data.documents[index]
+                                              ['needExam'] ==
+                                          true) {
                                         getExamResultForUser(
                                             context,
                                             snapshot.data.documents[index]
-                                            ['code'],
-                                            snapshot.data.documents[index]['id'],snapshot.data.documents[index]['ExamCode']);
-                                      }else{
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (_) => YoutubePlayerPage(snapshot.data.documents[index]
-                                            ['code'])));
+                                                ['code'],
+                                            snapshot.data.documents[index]
+                                                ['id'],
+                                            snapshot.data.documents[index]
+                                                ['ExamCode']);
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    YoutubePlayerPage(snapshot
+                                                            .data
+                                                            .documents[index]
+                                                        ['code'])));
                                       }
                                     },
                                     child: Row(
@@ -255,13 +297,14 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
     ));
   }
 
-  Future<dynamic> getExamResultForUser(context, videoCode, id,ExamCode) async {
+  Future<dynamic> getExamResultForUser(context, videoCode, id, ExamCode) async {
     ///Test/test2
+
     final DocumentReference document = Firestore.instance
         .collection("Test")
         .document(ExamCode)
         .collection('UsersResults')
-        .document('12012020');
+        .document(uid);
 
     await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
       bool exist = snapshot.exists;
@@ -274,18 +317,18 @@ class RoomContentVideoStreamBuilder extends StatelessWidget {
 
           Firestore.instance
               .collection("Rooms")
-              .document("*$roomCode")
+              .document("*${widget.roomCode}")
               .collection("Videos")
               .document(id)
               .updateData({"views": FieldValue.increment(1)});
         } else {
           print("the user didnt pass the exam");
-          Navigator.push(context,
-              MaterialPageRoute(builder: (_) => ExamsArena()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => ExamsArena(ExamCode)));
         }
       } else {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (_) => ExamsArena()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => ExamsArena(ExamCode)));
       }
     });
   }
