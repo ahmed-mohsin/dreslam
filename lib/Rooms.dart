@@ -902,9 +902,12 @@ int minimumRQ;
                     .setData({"pass": true,'result':distinctIds.length});
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
+                showSucsessAlertDialog(context);
               }else{
                 Navigator.of(context).pop();
                 print('محتاج تزاكر تاني');
+                Navigator.of(context).pop();
+                showFailedAlertDialog(context);
               }
             },
           )
@@ -912,7 +915,41 @@ int minimumRQ;
       ),
     );
   }
+  showFailedAlertDialog(BuildContext context) {
 
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(backgroundColor: Colors.black,
+      title: Text("FAILED",style:TextStyle(color: redColor),),
+      content: Text("YOU HAVE ${(minimumRQ - distinctIds.length)} WRONG ANSWERS , YOU NEED TO ANSWER MORE CORRECT QUESTIONS TO  WATCH THIS VIDEO",style:TextStyle(color: redColor),),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showSucsessAlertDialog(BuildContext context) {
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(backgroundColor: Colors.black,
+      title: Text("CONGRATS",style:TextStyle(color: goldenColor),),
+      content: Text("YOU CAN NOW WATCH THE VIDEO",style:TextStyle(color: goldenColor),),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   Future<dynamic> getData(code) async {
     ///Test/test2
     final DocumentReference document =
