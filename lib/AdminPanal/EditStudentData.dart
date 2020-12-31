@@ -138,6 +138,17 @@ class _itemsState extends State<items> {
     Paint(5, 'Indigo', Colors.indigo),
     Paint(6, 'Yellow', Colors.yellow),
     Paint(7, 'Lime', Colors.lime),
+    Paint(8, 'Lime', Colors.lime),
+    Paint(9, 'Lime', Colors.lime),
+    Paint(10, 'Lime', Colors.lime),
+    Paint(11, 'Lime', Colors.lime),
+    Paint(12, 'Lime', Colors.lime),
+    Paint(13, 'Lime', Colors.lime),
+    Paint(14, 'Lime', Colors.lime),
+    Paint(15, 'Lime', Colors.lime),
+    Paint(16, 'Lime', Colors.lime),
+    Paint(17, 'Lime', Colors.lime),
+    Paint(18, 'Lime', Colors.lime),
   ];
 
   @override
