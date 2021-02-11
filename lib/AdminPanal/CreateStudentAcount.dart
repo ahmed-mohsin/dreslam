@@ -153,6 +153,11 @@ class _itemsState extends State<items> {
     Paint(13, 'Yellow', Colors.yellow),
     Paint(14, 'Yellow', Colors.yellow),
     Paint(15, 'Yellow', Colors.yellow),
+    Paint(16, 'Yellow', Colors.yellow),
+    Paint(17, 'Yellow', Colors.yellow),
+    Paint(18, 'Yellow', Colors.yellow),
+    Paint(19, 'Yellow', Colors.yellow),
+    Paint(20, 'Yellow', Colors.yellow),
   ];
   bool showAddRooms;
 

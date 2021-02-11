@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print(androidInfo.hardware);
       print(androidInfo.host);
       print(androidInfo.id);
-      print(androidInfo.isPhysicalDevice);
+      print('is physicallllllllllllllllllllllllllllllllllllllll advice >>>>>>> ${androidInfo.isPhysicalDevice}');
       print(androidInfo.manufacturer);
       print("model>>>>>>>>>>>>>>>>>>>>>>>" + androidInfo.model);
       print(androidInfo.product);
