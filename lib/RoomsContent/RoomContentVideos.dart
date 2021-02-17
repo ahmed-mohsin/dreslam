@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreslamelshahawy/Models/ModelExam.dart';
 import 'package:dreslamelshahawy/Rooms.dart';
+import 'package:dreslamelshahawy/RoomsContent/VideosWaterScreen.dart';
 import 'package:dreslamelshahawy/UserScreens/Exam.dart';
 import 'package:dreslamelshahawy/component/flushbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -213,10 +214,10 @@ class _RoomContentVideoStreamBuilderState extends State<RoomContentVideoStreamBu
                                             context,
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                    YoutubePlayerPage(snapshot
-                                                            .data
-                                                            .documents[index]
-                                                        ['code'])));
+                                                    MyCard(id: snapshot
+                                                        .data
+                                                        .documents[index]
+                                                    ['code'],)));
                                       }
                                     },
                                     child: Row(
@@ -257,10 +258,10 @@ class _RoomContentVideoStreamBuilderState extends State<RoomContentVideoStreamBu
                                             context,
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                    YoutubePlayerPage(snapshot
-                                                            .data
-                                                            .documents[index]
-                                                        ['code'])));
+                                                    MyCard(id: snapshot
+                                                        .data
+                                                        .documents[index]
+                                                    ['code'],)));
                                       }
                                     },
                                     child: Row(
