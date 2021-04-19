@@ -108,7 +108,6 @@ class _SplashState extends State<Splash> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
       body: SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(image: decorationImage("g3.jpg")),

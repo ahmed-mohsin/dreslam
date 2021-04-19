@@ -122,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
         key: _formKey,
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          resizeToAvoidBottomPadding: true,
           body: SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(image: decorationImage("g1.jpg")),

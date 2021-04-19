@@ -119,7 +119,6 @@ class _RoomsState extends State<Rooms> {
             ),
           ),
           resizeToAvoidBottomInset: true,
-          resizeToAvoidBottomPadding: true,
           body: roomsName.length == 0
               ? SignInToSeeContent()
               : Container(
@@ -531,7 +530,6 @@ class RoomContent extends StatelessWidget {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          resizeToAvoidBottomPadding: true,
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
             iconTheme: new IconThemeData(color: mainColor),
