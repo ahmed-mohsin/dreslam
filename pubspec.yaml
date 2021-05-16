@@ -38,7 +38,7 @@ dependencies:
   status_alert: ^0.1.2
   google_nav_bar: ^2.0.0
   line_icons: ^0.2.0
-  flutube: ^0.8.3
+  #flutube: ^0.8.3
   youtube_player_flutter: ^6.1.1
   shared_preferences: ^0.5.12
 #  firebase_remote_config: 0.3.1+1

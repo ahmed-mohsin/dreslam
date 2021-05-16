@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutube/flutube.dart';
 import 'Decorations.dart';
 import 'Rooms.dart';
 import 'colors.dart';
@@ -27,22 +26,6 @@ class _YoutubePlayerPage2State extends State<YoutubePlayerPage2> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(image: decorationImage("g3.jpg")),
         child: Container(
-          child: FluTube(
-            'https://www.youtube.com/watch?v=${widget.id}',
-            aspectRatio: 16 / 9,
-            autoPlay: true,
-            looping: false,
-            allowMuting: true,
-            showControls: true,
-            allowFullScreen: true,
-            fullscreenByDefault: true,
-            showThumb: true,
-            placeholder: SpinKitCircle(
-              color: goldenColor,
-            ),
-            onVideoStart: () {},
-            onVideoEnd: () {},
-          ),
         ),
       ),
     );

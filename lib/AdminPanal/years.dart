@@ -80,10 +80,14 @@ class _YearsBodyState extends State<YearsBody> {
         shrinkWrap: true,
         crossAxisCount: 2,
         children: <Widget>[
-          yearItem("الأولي", "101", r101, r101val),
-          yearItem("الثانية", "102", r102, r102val),
-          yearItem("الثالثة", "103", r103, r103val),
-          yearItem("الرابعة", "104", r104, r104val),
+          yearItem("الأولي عربي", "101", ar101, ar101val),
+          yearItem("الثانية عربي", "102", ar102, ar102val),
+          yearItem("الثالثة عربي", "103", ar103, ar103val),
+          yearItem("الرابعة عربي", "104", ar104, ar104val),
+          yearItem("الأولي انجليزي", "en101", en101, en101val),
+          yearItem("الثانية انجليزي", "en102", en102, en102val),
+          yearItem("الثالثة انجليزي", "en103", en103, en103val),
+          yearItem("الرابعة انجليزي", "en104", en104, en104val),
          widget.type=="videos"?Padding(
             padding: const EdgeInsets.all(8.0),
             child: Material(
